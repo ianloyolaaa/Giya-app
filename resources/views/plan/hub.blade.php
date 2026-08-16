@@ -8,8 +8,8 @@
         <span class="eyebrow-bar"></span>
         <span class="eyebrow-text">Plan Your Journey</span>
     </div>
-    <h1 style="font-family:var(--font-display);font-size:32px;margin:0 0 10px">Pilgrimage Plan Hub</h1>
-    <p style="color:var(--text-muted);font-size:15px;line-height:1.7;max-width:580px;margin:0 0 40px">
+    <h1 style="font-family:var(--font-display);font-size: 2rem;margin:0 0 10px">Pilgrimage Plan Hub</h1>
+    <p style="color:var(--text-muted);font-size: 0.9375rem;line-height:1.7;max-width:580px;margin:0 0 40px">
         Choose how you want to plan your religious journey across Metro Cebu — build a custom
         route, follow the Visita Iglesia tradition, or continue where you left off.
     </p>
@@ -55,17 +55,17 @@
                 <span class="plan-card-body">
                     <span class="d-flex align-items-start justify-content-between mb-3">
                         <span style="width:48px;height:48px;border-radius:16px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center">
-                            <i class="bi bi-{{ $card['icon'] }}" style="font-size:22px;color:var(--primary)"></i>
+                            <i class="bi bi-{{ $card['icon'] }}" style="font-size: 1.375rem;color:var(--primary)"></i>
                         </span>
                         <span @class(['badge', 'badge-primary' => $card['featured'], 'badge-brown' => ! $card['featured']])>
                             {{ $card['badge'] }}
                         </span>
                     </span>
 
-                    <span style="display:block;font-size:15px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:8px">
+                    <span style="display:block;font-size: 0.9375rem;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:8px">
                         {{ $card['title'] }}
                     </span>
-                    <span style="display:block;font-size:12px;color:var(--text-muted);line-height:1.7;margin-bottom:14px">
+                    <span style="display:block;font-size: 0.75rem;color:var(--text-muted);line-height:1.7;margin-bottom:14px">
                         {{ $card['desc'] }}
                     </span>
 
@@ -73,7 +73,7 @@
                         @foreach ($card['points'] as $point)
                             <span class="d-flex align-items-center gap-2">
                                 <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></span>
-                                <span style="font-size:11px;color:var(--text)">{{ $point }}</span>
+                                <span style="font-size: 0.6875rem;color:var(--text)">{{ $point }}</span>
                             </span>
                         @endforeach
                     </span>
@@ -89,17 +89,17 @@
 
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:32px;border-top:1px solid var(--border-light);padding-top:40px" class="hub-bottom">
         <div>
-            <h2 class="section-title" style="font-size:20px">Recent Itineraries</h2>
+            <h2 class="section-title" style="font-size: 1.25rem">Recent Itineraries</h2>
 
             @forelse ($itineraries as $itinerary)
                 <a href="{{ route('plan.show', $itinerary) }}" class="history-item" style="text-decoration:none">
                     <span class="history-icon">
                         <i class="bi bi-{{ $itinerary->type === 'Visita Iglesia' ? 'building' : 'journal-text' }}"
-                           style="font-size:18px;color:var(--primary)"></i>
+                           style="font-size: 1.125rem;color:var(--primary)"></i>
                     </span>
                     <span style="flex:1;min-width:0">
-                        <span style="display:block;font-size:14px;font-weight:700;color:var(--text)">{{ $itinerary->name }}</span>
-                        <span style="display:block;font-size:12px;color:var(--text-muted);margin-top:2px">
+                        <span style="display:block;font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $itinerary->name }}</span>
+                        <span style="display:block;font-size: 0.75rem;color:var(--text-muted);margin-top:2px">
                             {{ $itinerary->total_stops }} stops
                             @if ($itinerary->scheduled_date) · {{ $itinerary->scheduled_date->format('M j, Y') }} @endif
                         </span>
@@ -116,7 +116,7 @@
         </div>
 
         <div>
-            <h2 class="section-title" style="font-size:20px">Pilgrim Tips</h2>
+            <h2 class="section-title" style="font-size: 1.25rem">Pilgrim Tips</h2>
             @foreach ([
                 ['person-vcard-fill', 'Dress modestly — cover shoulders and knees when entering a church.'],
                 ['fire',              'Light a candle and offer a prayer at each stop for a fuller experience.'],
@@ -124,8 +124,8 @@
                 ['droplet-fill',      'Bring water, especially for hilltop shrines such as Simala.'],
             ] as [$icon, $tip])
                 <div class="card card-body d-flex gap-3" style="padding:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)">
-                    <i class="bi bi-{{ $icon }}" style="font-size:18px;color:var(--gold);flex-shrink:0"></i>
-                    <p style="font-size:12px;color:var(--text-muted);line-height:1.7;margin:0">{{ $tip }}</p>
+                    <i class="bi bi-{{ $icon }}" style="font-size: 1.125rem;color:var(--gold);flex-shrink:0"></i>
+                    <p style="font-size: 0.75rem;color:var(--text-muted);line-height:1.7;margin:0">{{ $tip }}</p>
                 </div>
             @endforeach
         </div>

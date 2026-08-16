@@ -30,7 +30,7 @@
 
         <div class="footer-bottom">
             <span class="footer-copy">&copy; {{ date('Y') }} Giya · Metro Cebu Religious Tourism</span>
-            <span class="d-flex align-items-center gap-2" style="color:rgba(255,255,255,0.3);font-size:11px">
+            <span class="d-flex align-items-center gap-2" style="color:rgba(255,255,255,0.3);font-size: 0.6875rem">
                 <span style="width:6px;height:6px;border-radius:50%;background:var(--gold)"></span>
                 Made with faith in Cebu
             </span>

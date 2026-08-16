@@ -21,12 +21,12 @@
                 @forelse ($schedules as $s)
                     <tr>
                         <td style="font-weight:600">{{ $s->event_name }}</td>
-                        <td style="color:var(--text-muted);font-size:13px">{{ $s->church->name ?? '—' }}</td>
+                        <td style="color:var(--text-muted);font-size: 0.8125rem">{{ $s->church->name ?? '—' }}</td>
                         <td><span class="badge badge-brown">{{ $s->event_type }}</span></td>
-                        <td style="font-size:13px">
+                        <td style="font-size: 0.8125rem">
                             {{ $s->schedule_date?->format('M j, Y') ?? ($s->recurrence ?? 'Recurring') }}
                         </td>
-                        <td style="font-size:13px;color:var(--text-muted)">
+                        <td style="font-size: 0.8125rem;color:var(--text-muted)">
                             {{ $s->start_time ? \Illuminate\Support\Carbon::parse($s->start_time)->format('g:i A') : '—' }}
                         </td>
                         <td>
@@ -89,7 +89,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label class="d-flex align-items-center gap-2" style="font-size:13px;color:var(--text);cursor:pointer">
+                    <label class="d-flex align-items-center gap-2" style="font-size: 0.8125rem;color:var(--text);cursor:pointer">
                         <input type="checkbox" name="is_recurring" value="1"> This event repeats
                     </label>
                 </div>

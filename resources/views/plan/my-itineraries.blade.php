@@ -10,8 +10,8 @@
 
     <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
         <div>
-            <h1 style="font-family:var(--font-display);font-size:28px;margin:0 0 4px">My Itineraries</h1>
-            <p style="color:var(--text-muted);font-size:14px;margin:0">Your saved pilgrimage routes and plans</p>
+            <h1 style="font-family:var(--font-display);font-size: 1.75rem;margin:0 0 4px">My Itineraries</h1>
+            <p style="color:var(--text-muted);font-size: 0.875rem;margin:0">Your saved pilgrimage routes and plans</p>
         </div>
 
         @if ($atLimit)
@@ -30,8 +30,8 @@
         <div class="d-flex align-items-center gap-4 flex-wrap">
             <div style="flex:1;min-width:240px">
                 <div class="d-flex align-items-center justify-content-between mb-2">
-                    <span style="font-size:14px;font-weight:700;color:var(--text)">Free Itinerary Usage</span>
-                    <span style="font-size:14px;font-weight:700;color:{{ $atLimit ? 'var(--primary)' : 'var(--text)' }}">
+                    <span style="font-size: 0.875rem;font-weight:700;color:var(--text)">Free Itinerary Usage</span>
+                    <span style="font-size: 0.875rem;font-weight:700;color:{{ $atLimit ? 'var(--primary)' : 'var(--text)' }}">
                         {{ $used }} / {{ $limit }}
                     </span>
                 </div>
@@ -39,7 +39,7 @@
                     <div style="height:100%;border-radius:999px;transition:width .5s;width:{{ min(($used / $limit) * 100, 100) }}%;
                                 background:{{ $atLimit ? 'linear-gradient(to right,#8E3B2F,#C04030)' : 'linear-gradient(to right,#D7A94A,#F0C76C)' }}"></div>
                 </div>
-                <p style="font-size:12px;color:var(--text-muted);margin:6px 0 0">
+                <p style="font-size: 0.75rem;color:var(--text-muted);margin:6px 0 0">
                     @if ($atLimit)
                         Delete an itinerary to free a slot, or upgrade for unlimited routes.
                     @else
@@ -49,9 +49,9 @@
             </div>
 
             @if ($atLimit)
-                <span class="badge badge-primary" style="padding:10px 18px;font-size:12px">Upgrade for unlimited</span>
+                <span class="badge badge-primary" style="padding:10px 18px;font-size: 0.75rem">Upgrade for unlimited</span>
             @else
-                <span class="badge badge-amber" style="padding:10px 18px;font-size:12px">Free plan active</span>
+                <span class="badge badge-amber" style="padding:10px 18px;font-size: 0.75rem">Free plan active</span>
             @endif
         </div>
     </div>
@@ -78,9 +78,9 @@
                             <span class="badge status-{{ $itinerary->status }}">{{ $itinerary->status }}</span>
                         </div>
 
-                        <h3 style="font-size:16px;font-weight:700;color:var(--text);margin:0 0 8px">{{ $itinerary->name }}</h3>
+                        <h3 style="font-size: 1rem;font-weight:700;color:var(--text);margin:0 0 8px">{{ $itinerary->name }}</h3>
 
-                        <div class="d-flex align-items-center gap-3 mb-3" style="font-size:12px;color:var(--text-muted)">
+                        <div class="d-flex align-items-center gap-3 mb-3" style="font-size: 0.75rem;color:var(--text-muted)">
                             <span><i class="bi bi-geo-alt-fill"></i> {{ $itinerary->total_stops }} stops</span>
                             @if ($itinerary->scheduled_date)
                                 <span><i class="bi bi-calendar3"></i> {{ $itinerary->scheduled_date->format('M j, Y') }}</span>
@@ -90,8 +90,8 @@
                         @if ($itinerary->stops->isNotEmpty())
                             <div style="margin-bottom:14px">
                                 <div class="d-flex align-items-center justify-content-between mb-1">
-                                    <span style="font-size:11px;color:var(--text-muted)">Progress</span>
-                                    <span style="font-size:11px;font-weight:700;color:var(--primary)">{{ $itinerary->progressPercent() }}%</span>
+                                    <span style="font-size: 0.6875rem;color:var(--text-muted)">Progress</span>
+                                    <span style="font-size: 0.6875rem;font-weight:700;color:var(--primary)">{{ $itinerary->progressPercent() }}%</span>
                                 </div>
                                 <div style="height:6px;border-radius:999px;background:#F5E8D0;overflow:hidden">
                                     <div style="height:100%;background:var(--gold);width:{{ $itinerary->progressPercent() }}%"></div>
@@ -102,11 +102,11 @@
                                 @foreach ($itinerary->stops->take(3) as $stop)
                                     <div class="d-flex align-items-center gap-2">
                                         <span style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:{{ $stop->is_visited ? 'var(--primary)' : 'var(--gold)' }}"></span>
-                                        <span style="font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ $stop->church_name }}</span>
+                                        <span style="font-size: 0.6875rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ $stop->church_name }}</span>
                                     </div>
                                 @endforeach
                                 @if ($itinerary->stops->count() > 3)
-                                    <span style="font-size:11px;color:var(--text-muted);padding-left:14px">
+                                    <span style="font-size: 0.6875rem;color:var(--text-muted);padding-left:14px">
                                         +{{ $itinerary->stops->count() - 3 }} more
                                     </span>
                                 @endif
@@ -129,11 +129,11 @@
             @if ($atLimit)
                 <div style="border-radius:var(--radius-xl);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px;border:2px dashed rgba(142,59,47,.2);background:rgba(142,59,47,.02);min-height:240px;text-align:center">
                     <span style="width:56px;height:56px;border-radius:16px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center">
-                        <i class="bi bi-lock-fill" style="font-size:22px;color:var(--primary)"></i>
+                        <i class="bi bi-lock-fill" style="font-size: 1.375rem;color:var(--primary)"></i>
                     </span>
                     <div>
-                        <p style="font-size:14px;font-weight:700;color:var(--text);margin:0 0 6px">Unlock More Itineraries</p>
-                        <p style="font-size:12px;color:var(--text-muted);line-height:1.6;margin:0">
+                        <p style="font-size: 0.875rem;font-weight:700;color:var(--text);margin:0 0 6px">Unlock More Itineraries</p>
+                        <p style="font-size: 0.75rem;color:var(--text-muted);line-height:1.6;margin:0">
                             All {{ $limit }} free slots are in use. Delete one to continue planning.
                         </p>
                     </div>
@@ -148,7 +148,7 @@
     <div class="modal-dialog">
         <div class="modal-content" style="border:none;border-radius:var(--radius-2xl);padding:28px">
             <div class="modal-title"><i class="bi bi-trash3-fill" style="color:#D4183D"></i> Delete Itinerary?</div>
-            <p style="font-size:13px;color:var(--text-muted);line-height:1.7;margin:0 0 20px">
+            <p style="font-size: 0.8125rem;color:var(--text-muted);line-height:1.7;margin:0 0 20px">
                 This permanently removes “<span id="deleteName" style="font-weight:700;color:var(--text)"></span>”
                 and all of its stops. This cannot be undone.
             </p>

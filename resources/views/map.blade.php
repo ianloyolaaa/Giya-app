@@ -9,7 +9,7 @@
     .map-sidebar-head { padding: 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .map-cat-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 16px;
                      border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .map-cat-pill { padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 600;
+    .map-cat-pill { padding: 5px 12px; border-radius: 999px; font-size: 0.6875rem; font-weight: 600;
                     border: 1.5px solid var(--border); color: var(--text-muted);
                     background: var(--bg); cursor: pointer; white-space: nowrap;
                     transition: all .18s; font-family: var(--font-body); }
@@ -40,11 +40,11 @@
 
     <aside class="map-sidebar">
         <div class="map-sidebar-head">
-            <h1 style="font-family:var(--font-display);font-size:17px;margin:0 0 10px">Churches in Metro Cebu</h1>
+            <h1 style="font-family:var(--font-display);font-size: 1.0625rem;margin:0 0 10px">Churches in Metro Cebu</h1>
             <div style="position:relative">
                 <img src="{{ asset('images/icons/search.svg') }}" alt="" width="15" height="15"
                      style="position:absolute;left:12px;top:50%;transform:translateY(-50%)">
-                <input id="churchSearch" class="giya-input" style="padding-left:38px;padding-block:10px;font-size:13px"
+                <input id="churchSearch" class="giya-input" style="padding-left:38px;padding-block:10px;font-size: 0.8125rem"
                        placeholder="Search churches…" oninput="GiyaMap.search(this.value)" autocomplete="off">
             </div>
         </div>
@@ -80,28 +80,28 @@
             <div style="width:40px;height:4px;border-radius:999px;background:#E0D3C4;margin:0 auto 16px"></div>
             <div class="d-flex align-items-start gap-3 mb-3">
                 <span style="width:48px;height:48px;border-radius:14px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <i class="bi bi-building" style="font-size:20px;color:var(--primary)"></i>
+                    <i class="bi bi-building" style="font-size: 1.25rem;color:var(--primary)"></i>
                 </span>
                 <div style="flex:1;min-width:0">
-                    <div id="detailName"   style="font-size:16px;font-weight:700;color:var(--text)"></div>
-                    <div id="detailMeta"   style="font-size:12px;color:var(--text-muted);margin-top:2px"></div>
-                    <div id="detailRating" style="font-size:12px;color:var(--gold);font-weight:700;margin-top:4px"></div>
+                    <div id="detailName"   style="font-size: 1rem;font-weight:700;color:var(--text)"></div>
+                    <div id="detailMeta"   style="font-size: 0.75rem;color:var(--text-muted);margin-top:2px"></div>
+                    <div id="detailRating" style="font-size: 0.75rem;color:var(--gold);font-weight:700;margin-top:4px"></div>
                 </div>
                 <button type="button" class="input-suffix" style="position:static"
                         onclick="GiyaMap.closeDetail()" aria-label="Close">
-                    <i class="bi bi-x" style="font-size:20px"></i>
+                    <i class="bi bi-x" style="font-size: 1.25rem"></i>
                 </button>
             </div>
-            <p id="detailDesc" style="font-size:12px;color:var(--text-muted);line-height:1.7;margin:0 0 14px"></p>
+            <p id="detailDesc" style="font-size: 0.75rem;color:var(--text-muted);line-height:1.7;margin:0 0 14px"></p>
             <a href="{{ route('plan.create') }}" class="btn btn-primary btn-sm btn-w-full">
                 <i class="bi bi-plus-circle"></i> Add to an Itinerary
             </a>
         </div>
 
         <div class="map-legend">
-            <div style="font-weight:700;font-size:11px;margin-bottom:8px">Map Legend</div>
+            <div style="font-weight:700;font-size: 0.6875rem;margin-bottom:8px">Map Legend</div>
             @foreach ([['#8E3B2F','Basilica / Cathedral'],['#D7A94A','Shrine'],['#4A90D9','Church'],['#9B6B4A','Chapel'],['#6B7280','Heritage'],['#2E86DE','Your location']] as [$color, $label])
-                <div class="d-flex align-items-center gap-2 mb-1" style="font-size:11px;color:var(--text)">
+                <div class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.6875rem;color:var(--text)">
                     <span style="width:10px;height:10px;border-radius:50%;background:{{ $color }};flex-shrink:0"></span>{{ $label }}
                 </div>
             @endforeach
@@ -141,7 +141,7 @@ const GiyaMap = (function () {
         const box = document.getElementById('churchList');
 
         if (!list.length) {
-            box.innerHTML = '<p style="text-align:center;padding:36px 16px;color:var(--text-muted);font-size:13px">' +
+            box.innerHTML = '<p style="text-align:center;padding:36px 16px;color:var(--text-muted);font-size: 0.8125rem">' +
                             'No destinations match your search.</p>';
             return;
         }
@@ -153,10 +153,10 @@ const GiyaMap = (function () {
                    'align-items:center;justify-content:center;flex-shrink:0">' +
                    '<i class="bi bi-building" style="color:' + c.color + '"></i></span>' +
                    '<span style="min-width:0;flex:1">' +
-                   '<span style="display:block;font-size:13px;font-weight:700;color:var(--text)">' + c.name + '</span>' +
-                   '<span style="display:block;font-size:11px;color:var(--text-muted);margin-top:2px">' + (c.location || '') + '</span>' +
+                   '<span style="display:block;font-size: 0.8125rem;font-weight:700;color:var(--text)">' + c.name + '</span>' +
+                   '<span style="display:block;font-size: 0.6875rem;color:var(--text-muted);margin-top:2px">' + (c.location || '') + '</span>' +
                    '<span style="display:flex;align-items:center;gap:6px;margin-top:4px">' +
-                   '<span style="font-size:11px;font-weight:700;color:var(--gold)">★ ' + c.rating.toFixed(1) + '</span>' +
+                   '<span style="font-size: 0.6875rem;font-weight:700;color:var(--gold)">★ ' + c.rating.toFixed(1) + '</span>' +
                    '<span class="badge badge-brown">' + c.category + '</span></span></span></button>';
         }).join('');
     }

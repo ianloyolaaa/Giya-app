@@ -42,11 +42,11 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <label class="d-flex align-items-center gap-2 m-0" style="font-size:13px;color:var(--text-muted);cursor:pointer">
+            <label class="d-flex align-items-center gap-2 m-0" style="font-size: 0.8125rem;color:var(--text-muted);cursor:pointer">
                 <input type="checkbox" name="remember" value="1" {{ old('remember') ? 'checked' : '' }}>
                 Remember me
             </label>
-            <a href="{{ route('password.request') }}" style="font-size:13px;color:var(--primary);font-weight:600">
+            <a href="{{ route('password.request') }}" style="font-size: 0.8125rem;color:var(--primary);font-weight:600">
                 Forgot password?
             </a>
         </div>

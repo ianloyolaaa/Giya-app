@@ -9,12 +9,12 @@
     @foreach ($stats as $stat)
         <div class="card card-body">
             <span style="width:40px;height:40px;border-radius:12px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;margin-bottom:10px">
-                <i class="bi bi-{{ $stat['icon'] }}" style="font-size:18px;color:var(--primary)"></i>
+                <i class="bi bi-{{ $stat['icon'] }}" style="font-size: 1.125rem;color:var(--primary)"></i>
             </span>
-            <div style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--text);line-height:1">
+            <div style="font-family:var(--font-display);font-size: 1.5rem;font-weight:700;color:var(--text);line-height:1">
                 {{ number_format($stat['value']) }}
             </div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:4px">{{ $stat['label'] }}</div>
+            <div style="font-size: 0.6875rem;color:var(--text-muted);margin-top:4px">{{ $stat['label'] }}</div>
         </div>
     @endforeach
 </div>
@@ -42,10 +42,10 @@
         <div class="d-flex align-items-center gap-3"
              style="padding:10px 0;{{ $i < count($recentActivity) - 1 ? 'border-bottom:1px solid var(--border-light)' : '' }}">
             <span style="width:30px;height:30px;border-radius:50%;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                <i class="bi bi-{{ $item['icon'] }}" style="font-size:13px;color:var(--primary)"></i>
+                <i class="bi bi-{{ $item['icon'] }}" style="font-size: 0.8125rem;color:var(--primary)"></i>
             </span>
-            <span style="flex:1;font-size:13px;color:var(--text)">{{ $item['text'] }}</span>
-            <span style="font-size:11px;color:var(--text-muted);flex-shrink:0">
+            <span style="flex:1;font-size: 0.8125rem;color:var(--text)">{{ $item['text'] }}</span>
+            <span style="font-size: 0.6875rem;color:var(--text-muted);flex-shrink:0">
                 {{ $item['at']?->diffForHumans() }}
             </span>
         </div>

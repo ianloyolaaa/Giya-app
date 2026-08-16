@@ -36,7 +36,13 @@
                 </span>
 
                 <a href="{{ route('profile') }}" class="nav-avatar-wrap">
-                    <span class="nav-avatar">{{ $user->initials() }}</span>
+                    <span class="nav-avatar">
+                    @if ($user->avatarPath())
+                        <img src="{{ $user->avatarPath() }}" alt="{{ $user->name }}">
+                    @else
+                        {{ $user->initials() }}
+                    @endif
+                </span>
                     <span class="nav-username">{{ $user->firstName() }}</span>
                 </a>
 
@@ -47,7 +53,7 @@
             @endauth
 
             <button type="button" class="hamburger-btn" id="navHamburger" aria-label="Toggle navigation">
-                <i class="bi bi-list" style="font-size:20px;color:var(--gold)"></i>
+                <i class="bi bi-list" style="font-size: 1.25rem;color:var(--gold)"></i>
             </button>
         </div>
     </div>

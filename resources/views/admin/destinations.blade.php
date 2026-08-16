@@ -36,12 +36,12 @@
                     </span>
                 </div>
 
-                <h3 style="font-size:15px;font-weight:700;color:var(--text);margin:0 0 4px">{{ $church->name }}</h3>
-                <p style="font-size:12px;color:var(--text-muted);margin:0 0 10px">
-                    <i class="bi bi-geo-alt-fill" style="font-size:10px"></i> {{ $church->location }}
+                <h3 style="font-size: 0.9375rem;font-weight:700;color:var(--text);margin:0 0 4px">{{ $church->name }}</h3>
+                <p style="font-size: 0.75rem;color:var(--text-muted);margin:0 0 10px">
+                    <i class="bi bi-geo-alt-fill" style="font-size: 0.625rem"></i> {{ $church->location }}
                 </p>
 
-                <div class="d-flex align-items-center gap-3 mb-3" style="font-size:12px;color:var(--text-muted)">
+                <div class="d-flex align-items-center gap-3 mb-3" style="font-size: 0.75rem;color:var(--text-muted)">
                     <span><i class="bi bi-star-fill" style="color:var(--gold)"></i> {{ number_format($church->rating, 1) }}</span>
                     @if ($church->is_featured)<span class="badge badge-amber">Featured</span>@endif
                 </div>

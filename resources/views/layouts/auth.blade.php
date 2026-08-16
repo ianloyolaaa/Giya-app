@@ -7,8 +7,8 @@
     <title>GIYA — @yield('title')</title>
 
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/giya-logo.svg') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/giya-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/giya.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/giya-icons.css') }}?v={{ filemtime(public_path('assets/css/giya-icons.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/giya.css') }}?v={{ filemtime(public_path('assets/css/giya.css')) }}">
 </head>
 <body class="auth-page">
 
@@ -40,6 +40,6 @@
         @yield('content')
     </div>
 </div>
-<script src="{{ asset('assets/js/giya.js') }}"></script>
+<script src="{{ asset('assets/js/giya.js') }}?v={{ filemtime(public_path('assets/js/giya.js')) }}"></script>
 </body>
 </html>

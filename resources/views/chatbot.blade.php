@@ -6,13 +6,13 @@
 
     <div class="d-flex align-items-center gap-3 mb-4">
         <span style="width:52px;height:52px;border-radius:16px;background:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <i class="bi bi-chat-dots-fill" style="font-size:22px;color:var(--gold)"></i>
+            <i class="bi bi-chat-dots-fill" style="font-size: 1.375rem;color:var(--gold)"></i>
         </span>
         <div>
-            <h1 style="font-family:var(--font-display);font-size:24px;margin:0">Giya AI Assistant</h1>
+            <h1 style="font-family:var(--font-display);font-size: 1.5rem;margin:0">Giya AI Assistant</h1>
             <div class="d-flex align-items-center gap-2" style="margin-top:2px">
                 <span style="width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block"></span>
-                <span style="font-size:13px;color:var(--text-muted)">Pilgrimage guide for Metro Cebu</span>
+                <span style="font-size: 0.8125rem;color:var(--text-muted)">Pilgrimage guide for Metro Cebu</span>
             </div>
         </div>
     </div>
@@ -22,19 +22,25 @@
         <div style="padding:24px;display:flex;flex-direction:column;gap:16px;background:#fff">
             <div class="d-flex gap-3">
                 <span style="width:36px;height:36px;border-radius:50%;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <i class="bi bi-stars" style="color:var(--primary);font-size:15px"></i>
+                    <i class="bi bi-stars" style="color:var(--primary);font-size: 0.9375rem"></i>
                 </span>
                 <div class="chat-bubble chat-bubble-bot">Maayong buntag! I am Giya AI, your pilgrimage companion for Metro Cebu. Soon you will be able to ask me about churches, mass schedules, and pilgrimage routes right here.</div>
             </div>
 
             <div class="d-flex gap-3 flex-row-reverse">
-                <span class="nav-avatar" style="flex-shrink:0">{{ auth()->user()->initials() }}</span>
+                <span class="nav-avatar" style="flex-shrink:0">
+                    @if (auth()->user()->avatarPath())
+                        <img src="{{ auth()->user()->avatarPath() }}" alt="{{ auth()->user()->name }}">
+                    @else
+                        {{ auth()->user()->initials() }}
+                    @endif
+                </span>
                 <div class="chat-bubble chat-bubble-user">What churches are near me?</div>
             </div>
 
             <div class="d-flex gap-3">
                 <span style="width:36px;height:36px;border-radius:50%;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <i class="bi bi-stars" style="color:var(--primary);font-size:15px"></i>
+                    <i class="bi bi-stars" style="color:var(--primary);font-size: 0.9375rem"></i>
                 </span>
                 <div class="chat-bubble chat-bubble-bot" style="opacity:.55">
                     <span class="d-inline-flex align-items-center gap-2">
@@ -49,7 +55,7 @@
             <span class="badge badge-amber mb-3" style="padding:5px 14px">
                 <i class="bi bi-cone-striped"></i> Coming Soon
             </span>
-            <p style="font-size:14px;color:var(--text-muted);line-height:1.75;max-width:520px;margin:0 auto 20px">
+            <p style="font-size: 0.875rem;color:var(--text-muted);line-height:1.75;max-width:520px;margin:0 auto 20px">
                 The conversational assistant is under development. In the meantime you can
                 browse every destination on the map or build a route in the Plan Hub —
                 both work fully offline.
@@ -66,7 +72,7 @@
     </div>
 
     <div class="mt-4">
-        <h2 class="section-title" style="font-size:18px">What Giya AI will help with</h2>
+        <h2 class="section-title" style="font-size: 1.125rem">What Giya AI will help with</h2>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
             @foreach ([
                 ['clock-fill',      'Church Hours',    'Opening and closing times for every destination.'],
@@ -75,9 +81,9 @@
                 ['universal-access','Accessibility',   'Wheelchair access and visitor guidelines.'],
             ] as [$icon, $title, $desc])
                 <div class="card card-body" style="padding:16px">
-                    <i class="bi bi-{{ $icon }}" style="font-size:20px;color:var(--gold)"></i>
-                    <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:8px">{{ $title }}</div>
-                    <div style="font-size:12px;color:var(--text-muted);line-height:1.6;margin-top:4px">{{ $desc }}</div>
+                    <i class="bi bi-{{ $icon }}" style="font-size: 1.25rem;color:var(--gold)"></i>
+                    <div style="font-size: 0.875rem;font-weight:700;color:var(--text);margin-top:8px">{{ $title }}</div>
+                    <div style="font-size: 0.75rem;color:var(--text-muted);line-height:1.6;margin-top:4px">{{ $desc }}</div>
                 </div>
             @endforeach
         </div>

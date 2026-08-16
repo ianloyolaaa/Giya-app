@@ -27,7 +27,7 @@
                 Discover the Sacred Heart of Cebu
             </h1>
 
-            <p style="color:rgba(255,255,255,0.8);font-size:16px;line-height:1.75;max-width:560px;margin:0 0 24px">
+            <p style="color:rgba(255,255,255,0.8);font-size: 1rem;line-height:1.75;max-width:560px;margin:0 0 24px">
                 Giya is your companion for pilgrimage and religious tourism across Metro Cebu 
                 find churches, plan routes, and walk in faith through the Philippines' oldest diocese.
             </p>
@@ -48,8 +48,8 @@
                     [$stats['cities'], 'Cities Covered'],
                 ] as [$value, $label])
                     <div style="min-width:110px">
-                        <div style="font-family:var(--font-display);color:var(--gold);font-size:24px;font-weight:700;line-height:1">{{ $value }}</div>
-                        <div style="color:rgba(255,255,255,0.6);font-size:12px;margin-top:4px">{{ $label }}</div>
+                        <div style="font-family:var(--font-display);color:var(--gold);font-size: 1.5rem;font-weight:700;line-height:1">{{ $value }}</div>
+                        <div style="color:rgba(255,255,255,0.6);font-size: 0.75rem;margin-top:4px">{{ $label }}</div>
                     </div>
                 @endforeach
             </div>
@@ -97,14 +97,14 @@
                 <a href="{{ route($route) }}" class="card card-hover"
                    style="padding:20px;display:flex;flex-direction:column;gap:12px;text-decoration:none">
                     <span style="width:48px;height:48px;border-radius:16px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center">
-                        <i class="bi bi-{{ $icon }}" style="font-size:22px;color:var(--primary)"></i>
+                        <i class="bi bi-{{ $icon }}" style="font-size: 1.375rem;color:var(--primary)"></i>
                     </span>
                     <span>
-                        <span style="display:block;font-size:15px;font-weight:700;color:var(--text)">{{ $title }}</span>
-                        <span style="display:block;font-size:12px;color:var(--text-muted);margin-top:4px;line-height:1.6">{{ $desc }}</span>
+                        <span style="display:block;font-size: 0.9375rem;font-weight:700;color:var(--text)">{{ $title }}</span>
+                        <span style="display:block;font-size: 0.75rem;color:var(--text-muted);margin-top:4px;line-height:1.6">{{ $desc }}</span>
                     </span>
-                    <span style="margin-top:auto;font-size:12px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:4px">
-                        Get started <i class="bi bi-chevron-right" style="font-size:11px"></i>
+                    <span style="margin-top:auto;font-size: 0.75rem;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:4px">
+                        Get started <i class="bi bi-chevron-right" style="font-size: 0.6875rem"></i>
                     </span>
                 </a>
             @endforeach
@@ -146,17 +146,17 @@
                          style="padding:14px;margin-bottom:10px;box-shadow:var(--shadow-sm)">
                         <span style="width:56px;height:56px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px;
                                      background:{{ $i === 0 ? 'var(--primary)' : 'var(--gold-bg)' }}">
-                            <span style="font-size:9px;font-weight:700;text-transform:uppercase;line-height:1.2;
+                            <span style="font-size: 0.5625rem;font-weight:700;text-transform:uppercase;line-height:1.2;
                                          color:{{ $i === 0 ? 'var(--gold)' : 'var(--primary)' }}">{{ $event->event_type }}</span>
                         </span>
                         <div style="flex:1;min-width:0">
-                            <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $event->event_name }}</div>
-                            <div style="font-size:12px;color:var(--text-muted)">
-                                <i class="bi bi-building" style="font-size:11px"></i>
+                            <div style="font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $event->event_name }}</div>
+                            <div style="font-size: 0.75rem;color:var(--text-muted)">
+                                <i class="bi bi-building" style="font-size: 0.6875rem"></i>
                                 {{ $event->church->name ?? 'Metro Cebu' }}
                             </div>
                         </div>
-                        <div style="font-size:12px;font-weight:700;color:var(--primary);white-space:nowrap">
+                        <div style="font-size: 0.75rem;font-weight:700;color:var(--primary);white-space:nowrap">
                             {{ $event->schedule_date?->format('M j, Y') ?? ($event->recurrence ?? 'Recurring') }}
                         </div>
                     </div>
@@ -169,12 +169,12 @@
             <div class="upgrade-card d-flex flex-column" style="padding:28px;min-height:320px">
                 <div style="position:relative">
                     <span style="width:48px;height:48px;border-radius:16px;background:rgba(215,169,74,0.2);display:flex;align-items:center;justify-content:center;margin-bottom:16px">
-                        <i class="bi bi-stars" style="font-size:22px;color:var(--gold)"></i>
+                        <i class="bi bi-stars" style="font-size: 1.375rem;color:var(--gold)"></i>
                     </span>
-                    <h3 style="font-family:var(--font-display);color:#fff;font-size:22px;line-height:1.3;margin:0 0 12px">
+                    <h3 style="font-family:var(--font-display);color:#fff;font-size: 1.375rem;line-height:1.3;margin:0 0 12px">
                         Ready to begin your pilgrimage?
                     </h3>
-                    <p style="color:rgba(255,255,255,0.7);font-size:13px;line-height:1.7;margin:0">
+                    <p style="color:rgba(255,255,255,0.7);font-size: 0.8125rem;line-height:1.7;margin:0">
                         Build a personalised route based on your available time, location, and devotion.
                     </p>
                 </div>

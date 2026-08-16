@@ -10,8 +10,8 @@
 
     <div class="d-flex align-items-start justify-content-between flex-wrap gap-3 mb-4">
         <div>
-            <h1 style="font-family:var(--font-display);font-size:28px;margin:0 0 4px">Custom Itinerary Planner</h1>
-            <p style="color:var(--text-muted);font-size:14px;margin:0">Build a personalised pilgrimage route across Metro Cebu</p>
+            <h1 style="font-family:var(--font-display);font-size: 1.75rem;margin:0 0 4px">Custom Itinerary Planner</h1>
+            <p style="color:var(--text-muted);font-size: 0.875rem;margin:0">Build a personalised pilgrimage route across Metro Cebu</p>
         </div>
     </div>
 
@@ -86,13 +86,13 @@
                                     data-name="{{ $church->name }}" data-location="{{ $church->location }}"
                                     onclick="GiyaPlanner.add({{ $church->id }})">
                                 <span style="width:34px;height:34px;border-radius:9px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                                    <i class="bi bi-building" style="font-size:15px;color:{{ $church->color() }}"></i>
+                                    <i class="bi bi-building" style="font-size: 0.9375rem;color:{{ $church->color() }}"></i>
                                 </span>
                                 <span style="flex:1;min-width:0;text-align:left">
-                                    <span style="display:block;font-size:12px;font-weight:600;color:var(--text)">{{ $church->name }}</span>
-                                    <span style="display:block;font-size:10px;color:var(--text-muted)">{{ $church->location }}</span>
+                                    <span style="display:block;font-size: 0.75rem;font-weight:600;color:var(--text)">{{ $church->name }}</span>
+                                    <span style="display:block;font-size: 0.625rem;color:var(--text-muted)">{{ $church->location }}</span>
                                 </span>
-                                <span class="dest-mark" style="color:var(--primary);font-size:17px;font-weight:700">+</span>
+                                <span class="dest-mark" style="color:var(--primary);font-size: 1.0625rem;font-weight:700">+</span>
                             </button>
                         @endforeach
                     </div>
@@ -104,12 +104,12 @@
                 <div class="card card-body mb-3">
                     <div class="d-flex align-items-center justify-content-between mb-3">
                         <div class="card-title" style="margin:0">Route (<span id="stopCount">0</span> stops)</div>
-                        <div id="routeEstimate" style="font-size:12px;color:var(--text-muted);display:none"></div>
+                        <div id="routeEstimate" style="font-size: 0.75rem;color:var(--text-muted);display:none"></div>
                     </div>
 
                     <div id="routeEmpty" class="empty-state" style="padding:56px 20px">
                         <div class="empty-icon"><i class="bi bi-signpost-2" style="color:var(--gold)"></i></div>
-                        <div class="empty-title" style="font-size:15px">No stops yet</div>
+                        <div class="empty-title" style="font-size: 0.9375rem">No stops yet</div>
                         <div class="empty-desc">Add destinations from the panel on the left.</div>
                     </div>
 
@@ -137,20 +137,20 @@
                  transition:all .18s; width:100%; }
     .dest-item:hover:not(.added) { border-color:var(--primary); background:rgba(142,59,47,0.04); }
     .dest-item.added { background:var(--gold-bg); border-color:var(--gold); opacity:.65; cursor:default; }
-    .transport-btn { padding:8px 14px; border-radius:10px; font-size:12px; border:1.5px solid var(--border);
+    .transport-btn { padding:8px 14px; border-radius:10px; font-size: 0.75rem; border:1.5px solid var(--border);
                      color:var(--text-muted); background:var(--bg); cursor:pointer; transition:all .18s;
                      font-family:var(--font-body); }
     .transport-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
     .route-row { display:flex; gap:12px; }
     .route-node { display:flex; flex-direction:column; align-items:center; }
     .route-dot  { width:32px; height:32px; border-radius:50%; display:flex; align-items:center;
-                  justify-content:center; flex-shrink:0; font-size:11px; font-weight:700; color:#fff;
+                  justify-content:center; flex-shrink:0; font-size: 0.6875rem; font-weight:700; color:#fff;
                   background:var(--primary); border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.18); }
     .route-line { width:2px; flex:1; min-height:16px; background:rgba(215,169,74,.4); margin:2px auto; }
     .route-body { flex:1; padding-bottom:12px; }
     .route-card { display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:13px;
                   background:var(--bg); border:1px solid var(--border); }
-    .route-btn  { background:none; border:none; cursor:pointer; font-size:13px; line-height:1; padding:2px; }
+    .route-btn  { background:none; border:none; cursor:pointer; font-size: 0.8125rem; line-height:1; padding:2px; }
     @media (max-width: 950px) { .create-grid { grid-template-columns: 1fr !important; } }
 </style>
 @endpush
@@ -225,14 +225,14 @@ const GiyaPlanner = (function () {
                 '</div>' +
                 '<div class="route-body"><div class="route-card">' +
                   '<div style="flex:1;min-width:0">' +
-                    '<div style="font-size:13px;font-weight:700;color:var(--text)">' + stop.name + '</div>' +
-                    '<div style="font-size:11px;color:var(--text-muted)">' + stop.location + '</div>' +
-                    '<div style="font-size:11px;color:var(--primary);font-weight:700;margin-top:4px">Arrive ~' + hh + ':' + mm + '</div>' +
+                    '<div style="font-size: 0.8125rem;font-weight:700;color:var(--text)">' + stop.name + '</div>' +
+                    '<div style="font-size: 0.6875rem;color:var(--text-muted)">' + stop.location + '</div>' +
+                    '<div style="font-size: 0.6875rem;color:var(--primary);font-weight:700;margin-top:4px">Arrive ~' + hh + ':' + mm + '</div>' +
                   '</div>' +
                   '<div style="display:flex;flex-direction:column;gap:3px">' +
                     '<button type="button" class="route-btn" onclick="GiyaPlanner.move(' + i + ',-1)" style="color:' + (i === 0 ? '#D8C4BC' : 'var(--primary)') + '">▲</button>' +
                     '<button type="button" class="route-btn" onclick="GiyaPlanner.move(' + i + ',1)" style="color:' + (last ? '#D8C4BC' : 'var(--primary)') + '">▼</button>' +
-                    '<button type="button" class="route-btn" onclick="GiyaPlanner.remove(' + stop.id + ')" style="color:#D4183D;font-size:15px">×</button>' +
+                    '<button type="button" class="route-btn" onclick="GiyaPlanner.remove(' + stop.id + ')" style="color:#D4183D;font-size: 0.9375rem">×</button>' +
                   '</div>' +
                 '</div></div>' +
               '</div>';

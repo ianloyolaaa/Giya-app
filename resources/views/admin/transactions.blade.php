@@ -12,9 +12,9 @@
         ['hourglass-split',   'Pending',       number_format($summary['pending'])],
     ] as [$icon, $label, $value])
         <div class="card card-body">
-            <i class="bi bi-{{ $icon }}" style="font-size:20px;color:var(--gold)"></i>
-            <div style="font-family:var(--font-display);font-size:22px;font-weight:700;margin-top:8px">{{ $value }}</div>
-            <div style="font-size:12px;color:var(--text-muted)">{{ $label }}</div>
+            <i class="bi bi-{{ $icon }}" style="font-size: 1.25rem;color:var(--gold)"></i>
+            <div style="font-family:var(--font-display);font-size: 1.375rem;font-weight:700;margin-top:8px">{{ $value }}</div>
+            <div style="font-size: 0.75rem;color:var(--text-muted)">{{ $label }}</div>
         </div>
     @endforeach
 </div>
@@ -35,11 +35,11 @@
             <tbody>
                 @forelse ($transactions as $t)
                     <tr>
-                        <td style="font-family:monospace;font-size:12px">{{ $t->transaction_id }}</td>
+                        <td style="font-family:monospace;font-size: 0.75rem">{{ $t->transaction_id }}</td>
                         <td style="font-weight:600">{{ $t->user->name ?? 'Deleted user' }}</td>
-                        <td style="font-size:13px;color:var(--text-muted)">{{ $t->plan }}</td>
+                        <td style="font-size: 0.8125rem;color:var(--text-muted)">{{ $t->plan }}</td>
                         <td style="font-weight:700">₱{{ number_format($t->amount, 2) }}</td>
-                        <td style="font-size:13px">{{ $t->method ?? '—' }}</td>
+                        <td style="font-size: 0.8125rem">{{ $t->method ?? '—' }}</td>
                         <td>
                             <span @class([
                                 'badge',
@@ -48,7 +48,7 @@
                                 'badge-brown'  => in_array($t->status, ['Failed', 'Refunded']),
                             ])>{{ $t->status }}</span>
                         </td>
-                        <td style="font-size:13px;color:var(--text-muted)">{{ $t->created_at?->format('M j, Y') }}</td>
+                        <td style="font-size: 0.8125rem;color:var(--text-muted)">{{ $t->created_at?->format('M j, Y') }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="7"><x-empty-state icon="credit-card" title="No transactions yet" /></td></tr>

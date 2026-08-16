@@ -13,9 +13,9 @@
         ['flag-fill',      'Flagged',  $summary['flagged']],
     ] as [$icon, $label, $value])
         <div class="card card-body">
-            <i class="bi bi-{{ $icon }}" style="font-size:18px;color:var(--gold)"></i>
-            <div style="font-family:var(--font-display);font-size:22px;font-weight:700;margin-top:8px">{{ $value }}</div>
-            <div style="font-size:12px;color:var(--text-muted)">{{ $label }}</div>
+            <i class="bi bi-{{ $icon }}" style="font-size: 1.125rem;color:var(--gold)"></i>
+            <div style="font-family:var(--font-display);font-size: 1.375rem;font-weight:700;margin-top:8px">{{ $value }}</div>
+            <div style="font-size: 0.75rem;color:var(--text-muted)">{{ $label }}</div>
         </div>
     @endforeach
 </div>
@@ -35,22 +35,22 @@
             </span>
             <div style="flex:1;min-width:200px">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <span style="font-size:14px;font-weight:700;color:var(--text)">{{ $item->user->name ?? 'Deleted user' }}</span>
+                    <span style="font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $item->user->name ?? 'Deleted user' }}</span>
                     <x-stars :rating="$item->rating ?? 0" />
                     <span class="badge status-{{ $item->status === 'Approved' ? 'Completed' : ($item->status === 'Flagged' ? 'Draft' : 'Upcoming') }}">
                         {{ $item->status }}
                     </span>
                 </div>
-                <div style="font-size:12px;color:var(--text-muted);margin-top:2px">
+                <div style="font-size: 0.75rem;color:var(--text-muted);margin-top:2px">
                     {{ $item->church->name ?? 'Unknown destination' }} · {{ $item->created_at?->diffForHumans() }}
                 </div>
                 @if ($item->comment)
-                    <p style="font-size:13px;color:var(--text);line-height:1.7;margin:8px 0 0">{{ $item->comment }}</p>
+                    <p style="font-size: 0.8125rem;color:var(--text);line-height:1.7;margin:8px 0 0">{{ $item->comment }}</p>
                 @endif
             </div>
             <form method="POST" action="{{ route('admin.feedback.update', $item) }}" class="d-flex gap-2">
                 @csrf @method('PATCH')
-                <select name="status" class="giya-input" style="width:auto;padding:8px 12px;font-size:13px">
+                <select name="status" class="giya-input" style="width:auto;padding:8px 12px;font-size: 0.8125rem">
                     @foreach (['Pending', 'Approved', 'Flagged'] as $s)
                         <option value="{{ $s }}" @selected($item->status === $s)>{{ $s }}</option>
                     @endforeach

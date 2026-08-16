@@ -12,7 +12,7 @@
         </div>
     @enderror
 
-    <p style="font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:20px">
+    <p style="font-size: 0.8125rem;color:var(--text-muted);line-height:1.7;margin-bottom:20px">
         Enter the email address linked to your GIYA account and we will send you
         a link to set a new password. The link is valid for 60 minutes.
     </p>

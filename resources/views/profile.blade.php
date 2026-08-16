@@ -15,15 +15,15 @@
                 <img src="{{ $user->avatarPath() }}" alt="{{ $user->name }}"
                      style="width:80px;height:80px;border-radius:18px;border:3px solid rgba(215,169,74,0.55);object-fit:cover;flex-shrink:0">
             @else
-                <span style="width:80px;height:80px;border-radius:18px;border:3px solid rgba(215,169,74,0.55);background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:32px;font-weight:700;color:var(--primary-dark);flex-shrink:0">
+                <span style="width:80px;height:80px;border-radius:18px;border:3px solid rgba(215,169,74,0.55);background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size: 2rem;font-weight:700;color:var(--primary-dark);flex-shrink:0">
                     {{ $user->initials() }}
                 </span>
             @endif
             <div style="flex:1;min-width:220px">
-                <h1 style="font-family:var(--font-display);color:#fff;font-size:26px;line-height:1.2;margin:0">{{ $user->name }}</h1>
-                <p style="color:rgba(255,255,255,0.7);font-size:13px;margin:3px 0 0">{{ $user->email }}</p>
-                <p class="d-flex align-items-center gap-1" style="color:rgba(255,255,255,0.55);font-size:12px;margin:5px 0 0">
-                    <i class="bi bi-geo-alt-fill" style="color:var(--gold);font-size:11px"></i>
+                <h1 style="font-family:var(--font-display);color:#fff;font-size: 1.625rem;line-height:1.2;margin:0">{{ $user->name }}</h1>
+                <p style="color:rgba(255,255,255,0.7);font-size: 0.8125rem;margin:3px 0 0">{{ $user->email }}</p>
+                <p class="d-flex align-items-center gap-1" style="color:rgba(255,255,255,0.55);font-size: 0.75rem;margin:5px 0 0">
+                    <i class="bi bi-geo-alt-fill" style="color:var(--gold);font-size: 0.6875rem"></i>
                     Cebu City, Philippines · Member since
                     {{ ($user->member_since ?? $user->created_at)?->format('F Y') }}
                 </p>
@@ -76,8 +76,8 @@
                 ] as $i => [$label, $value])
                     <div class="d-flex justify-content-between align-items-center"
                          style="padding:9px 0;{{ $i < 4 ? 'border-bottom:1px solid var(--border-light)' : '' }}">
-                        <span style="font-size:13px;color:var(--text-muted)">{{ $label }}</span>
-                        <span style="font-size:13px;font-weight:600;color:var(--text);text-align:right">{{ $value }}</span>
+                        <span style="font-size: 0.8125rem;color:var(--text-muted)">{{ $label }}</span>
+                        <span style="font-size: 0.8125rem;font-weight:600;color:var(--text);text-align:right">{{ $value }}</span>
                     </div>
                 @endforeach
             </div>
@@ -94,9 +94,9 @@
                         ['compass-fill',    'Explorer',      $user->total_churches_visited >= 15],
                     ] as [$icon, $name, $earned])
                         <div style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 6px;border-radius:12px;text-align:center;border:1.5px solid var(--border);{{ $earned ? 'background:rgba(215,169,74,0.09);border-color:rgba(215,169,74,0.35)' : 'background:var(--bg);opacity:.45' }}">
-                            <i class="bi bi-{{ $icon }}" style="font-size:20px;color:{{ $earned ? 'var(--gold)' : 'var(--text-muted)' }}"></i>
-                            <span style="font-size:10px;font-weight:700;color:var(--text);line-height:1.25">{{ $name }}</span>
-                            @unless ($earned)<i class="bi bi-lock-fill" style="font-size:9px;color:var(--text-muted)"></i>@endunless
+                            <i class="bi bi-{{ $icon }}" style="font-size: 1.25rem;color:{{ $earned ? 'var(--gold)' : 'var(--text-muted)' }}"></i>
+                            <span style="font-size: 0.625rem;font-weight:700;color:var(--text);line-height:1.25">{{ $name }}</span>
+                            @unless ($earned)<i class="bi bi-lock-fill" style="font-size: 0.5625rem;color:var(--text-muted)"></i>@endunless
                         </div>
                     @endforeach
                 </div>
@@ -113,10 +113,10 @@
 
             @forelse ($visits->take(4) as $visit)
                 <div class="history-item" style="margin-bottom:8px">
-                    <span class="history-icon"><i class="bi bi-building" style="font-size:18px;color:var(--primary)"></i></span>
+                    <span class="history-icon"><i class="bi bi-building" style="font-size: 1.125rem;color:var(--primary)"></i></span>
                     <div style="flex:1;min-width:0">
-                        <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $visit->church_name }}</div>
-                        <div style="font-size:12px;color:var(--text-muted)">{{ $visit->visited_at?->format('M j, Y') }}</div>
+                        <div style="font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $visit->church_name }}</div>
+                        <div style="font-size: 0.75rem;color:var(--text-muted)">{{ $visit->visited_at?->format('M j, Y') }}</div>
                     </div>
                     @if ($visit->rating)
                         <x-stars :rating="$visit->rating" />
@@ -131,14 +131,14 @@
 
     {{-- ── Visit history ── --}}
     <section class="profile-panel d-none" id="panel-visits">
-        <h2 class="section-title" style="font-size:20px">Visit History</h2>
+        <h2 class="section-title" style="font-size: 1.25rem">Visit History</h2>
 
         @forelse ($visits as $visit)
             <div class="history-item">
-                <span class="history-icon"><i class="bi bi-building" style="font-size:18px;color:var(--primary)"></i></span>
+                <span class="history-icon"><i class="bi bi-building" style="font-size: 1.125rem;color:var(--primary)"></i></span>
                 <div style="flex:1;min-width:0">
-                    <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $visit->church_name }}</div>
-                    <div class="d-flex align-items-center gap-1" style="font-size:12px;color:var(--text-muted);margin-top:2px">
+                    <div style="font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $visit->church_name }}</div>
+                    <div class="d-flex align-items-center gap-1" style="font-size: 0.75rem;color:var(--text-muted);margin-top:2px">
                         <img src="{{ asset('images/icons/location.svg') }}" alt="" width="10" height="10">
                         Cebu · {{ $visit->visited_at?->format('M j, Y') }}
                     </div>
@@ -146,13 +146,13 @@
                 @if ($visit->rating)
                     <span class="d-flex align-items-center gap-2">
                         <x-stars :rating="$visit->rating" />
-                        <span style="font-size:12px;color:var(--text-muted)">Reviewed</span>
+                        <span style="font-size: 0.75rem;color:var(--text-muted)">Reviewed</span>
                     </span>
                 @else
                     <button type="button" class="btn btn-ghost btn-sm"
                             style="color:var(--primary);font-weight:700"
                             onclick="GiyaProfile.review({{ $visit->id }}, @js($visit->church_name))">
-                        Review <i class="bi bi-chevron-right" style="font-size:10px"></i>
+                        Review <i class="bi bi-chevron-right" style="font-size: 0.625rem"></i>
                     </button>
                 @endif
             </div>
@@ -165,7 +165,7 @@
     {{-- ── Itineraries ── --}}
     <section class="profile-panel d-none" id="panel-itineraries">
         <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-            <h2 class="section-title" style="font-size:20px;margin:0">My Itineraries</h2>
+            <h2 class="section-title" style="font-size: 1.25rem;margin:0">My Itineraries</h2>
             <a href="{{ route('plan.create') }}" class="btn btn-primary btn-sm">
                 <i class="bi bi-plus-lg"></i> New Itinerary
             </a>
@@ -175,11 +175,11 @@
             <div class="history-item">
                 <span class="history-icon">
                     <i class="bi bi-{{ $itinerary->type === 'Visita Iglesia' ? 'building' : 'journal-text' }}"
-                       style="font-size:18px;color:var(--primary)"></i>
+                       style="font-size: 1.125rem;color:var(--primary)"></i>
                 </span>
                 <div style="flex:1;min-width:0">
-                    <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $itinerary->name }}</div>
-                    <div style="font-size:12px;color:var(--text-muted);margin-top:2px">
+                    <div style="font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $itinerary->name }}</div>
+                    <div style="font-size: 0.75rem;color:var(--text-muted);margin-top:2px">
                         {{ $itinerary->total_stops }} stops
                         @if ($itinerary->scheduled_date) · {{ $itinerary->scheduled_date->format('M j, Y') }} @endif
                     </div>
@@ -200,21 +200,21 @@
     {{-- ── Settings ── --}}
     {{-- ── Favorites ── --}}
     <section class="profile-panel d-none" id="panel-favorites">
-        <h2 class="section-title" style="font-size:20px">Favorites</h2>
+        <h2 class="section-title" style="font-size: 1.25rem">Favorites</h2>
 
         @forelse ($favorites as $favorite)
             @continue (! $favorite->church)
             <div class="history-item" data-favorite-row="{{ $favorite->church_id }}">
                 <span class="history-icon" style="background:rgba(212,24,61,0.08)">
-                    <i class="bi bi-heart-fill" style="font-size:16px;color:#D4183D"></i>
+                    <i class="bi bi-heart-fill" style="font-size: 1rem;color:#D4183D"></i>
                 </span>
                 <div style="flex:1;min-width:0">
-                    <div style="font-size:14px;font-weight:700;color:var(--text)">{{ $favorite->church->name }}</div>
-                    <div style="font-size:12px;color:var(--text-muted);margin-top:2px">
-                        <i class="bi bi-geo-alt-fill" style="font-size:10px;color:var(--gold)"></i>
+                    <div style="font-size: 0.875rem;font-weight:700;color:var(--text)">{{ $favorite->church->name }}</div>
+                    <div style="font-size: 0.75rem;color:var(--text-muted);margin-top:2px">
+                        <i class="bi bi-geo-alt-fill" style="font-size: 0.625rem;color:var(--gold)"></i>
                         {{ $favorite->church->location }}
                         @if ($favorite->church->rating > 0)
-                            · <i class="bi bi-star-fill" style="font-size:10px;color:var(--gold)"></i>
+                            · <i class="bi bi-star-fill" style="font-size: 0.625rem;color:var(--gold)"></i>
                             {{ number_format($favorite->church->rating, 1) }}
                         @endif
                     </div>
@@ -236,7 +236,7 @@
 
     {{-- ── Preferences ── --}}
     <section class="profile-panel d-none" id="panel-preferences">
-        <h2 class="section-title" style="font-size:20px">Preferences</h2>
+        <h2 class="section-title" style="font-size: 1.25rem">Preferences</h2>
 
         <form method="POST" action="{{ route('profile.preferences') }}">
             @csrf @method('PATCH')
@@ -245,7 +245,7 @@
             <div class="card card-body mb-3">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <i class="bi bi-brightness-high-fill" style="color:var(--gold)"></i>
-                    <span style="font-size:15px;font-weight:700;color:var(--text)">Appearance</span>
+                    <span style="font-size: 0.9375rem;font-weight:700;color:var(--text)">Appearance</span>
                 </div>
 
                 <label class="form-label-sm" style="display:block;margin-bottom:6px">Font Size</label>
@@ -275,7 +275,7 @@
             <div class="card card-body mb-3">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <i class="bi bi-globe2" style="color:var(--gold)"></i>
-                    <span style="font-size:15px;font-weight:700;color:var(--text)">Language</span>
+                    <span style="font-size: 0.9375rem;font-weight:700;color:var(--text)">Language</span>
                     <span class="pref-soon">Coming soon</span>
                 </div>
 
@@ -285,7 +285,7 @@
                         <option value="{{ $language }}" @selected($prefs->language === $language)>{{ $language }}</option>
                     @endforeach
                 </select>
-                <p style="font-size:12px;color:var(--text-muted);margin:6px 0 0">
+                <p style="font-size: 0.75rem;color:var(--text-muted);margin:6px 0 0">
                     Your choice is saved now. Cebuano and Filipino translations are still
                     being prepared, so the interface stays in English for the moment.
                 </p>
@@ -295,7 +295,7 @@
             <div class="card card-body mb-3">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <i class="bi bi-bell-fill" style="color:var(--gold)"></i>
-                    <span style="font-size:15px;font-weight:700;color:var(--text)">Notifications</span>
+                    <span style="font-size: 0.9375rem;font-weight:700;color:var(--text)">Notifications</span>
                 </div>
 
                 @foreach ([
@@ -318,7 +318,7 @@
         </form>
 
         {{-- Account actions kept from the old Settings tab --}}
-        <h2 class="section-title" style="font-size:20px;margin-top:28px">Account</h2>
+        <h2 class="section-title" style="font-size: 1.25rem;margin-top:28px">Account</h2>
         <div class="card card-body">
             @foreach ([
                 ['shield-lock-fill', 'Change Password', 'Update the password used to sign in.', 'changePasswordModal'],
@@ -330,8 +330,8 @@
                         <i class="bi bi-{{ $icon }}" style="color:var(--primary)"></i>
                     </span>
                     <span style="flex:1">
-                        <span style="display:block;font-size:14px;font-weight:600;color:var(--text)">{{ $label }}</span>
-                        <span style="display:block;font-size:12px;color:var(--text-muted)">{{ $desc }}</span>
+                        <span style="display:block;font-size: 0.875rem;font-weight:600;color:var(--text)">{{ $label }}</span>
+                        <span style="display:block;font-size: 0.75rem;color:var(--text-muted)">{{ $desc }}</span>
                     </span>
                     <i class="bi bi-chevron-right" style="color:var(--text-muted)"></i>
                 </button>
@@ -345,8 +345,8 @@
                         <i class="bi bi-box-arrow-right" style="color:#D4183D"></i>
                     </span>
                     <span style="flex:1">
-                        <span style="display:block;font-size:14px;font-weight:600;color:#D4183D">Sign Out</span>
-                        <span style="display:block;font-size:12px;color:var(--text-muted)">End your session on this device.</span>
+                        <span style="display:block;font-size: 0.875rem;font-weight:600;color:#D4183D">Sign Out</span>
+                        <span style="display:block;font-size: 0.75rem;color:var(--text-muted)">End your session on this device.</span>
                     </span>
                     <i class="bi bi-chevron-right" style="color:var(--text-muted)"></i>
                 </button>
@@ -372,7 +372,7 @@
                                 <img id="avatarPreview" src="{{ $user->avatarPath() }}" alt=""
                                      style="width:64px;height:64px;border-radius:14px;object-fit:cover;border:2px solid var(--border)">
                             @else
-                                <span id="avatarPreview" style="width:64px;height:64px;border-radius:14px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--primary-dark)">
+                                <span id="avatarPreview" style="width:64px;height:64px;border-radius:14px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size: 1.5rem;font-weight:700;color:var(--primary-dark)">
                                     {{ $user->initials() }}
                                 </span>
                             @endif
@@ -380,7 +380,7 @@
                         <div style="flex:1">
                             <input id="pf-avatar" type="file" name="avatar" class="giya-input"
                                    accept="image/jpeg,image/png,image/webp">
-                            <p style="font-size:12px;color:var(--text-muted);margin:4px 0 0">JPG, PNG, or WEBP. Up to 2 MB.</p>
+                            <p style="font-size: 0.75rem;color:var(--text-muted);margin:4px 0 0">JPG, PNG, or WEBP. Up to 2 MB.</p>
                         </div>
                     </div>
                     @error('avatar')<span class="field-error">{{ $message }}</span>@enderror
@@ -492,7 +492,7 @@
                               placeholder="What made this visit meaningful?"></textarea>
                 </div>
 
-                <p style="font-size:12px;color:var(--text-muted);margin:0 0 12px">
+                <p style="font-size: 0.75rem;color:var(--text-muted);margin:0 0 12px">
                     Reviews are published once an administrator approves them.
                 </p>
 
@@ -508,7 +508,7 @@
 
 @push('head')
 <style>
-    .profile-tab { padding:16px 18px; font-size:14px; font-weight:500; color:var(--text-muted);
+    .profile-tab { padding:16px 18px; font-size: 0.875rem; font-weight:500; color:var(--text-muted);
                    background:none; border:none; border-bottom:2px solid transparent;
                    cursor:pointer; white-space:nowrap; transition:all .18s; font-family:var(--font-body); }
     .profile-tab.is-active { color:var(--primary); font-weight:700; border-bottom-color:var(--primary); }

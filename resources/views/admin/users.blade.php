@@ -12,11 +12,11 @@
         ['gem',         'Premium Members', $summary['premium']],
     ] as [$icon, $label, $value])
         <div class="card card-body">
-            <i class="bi bi-{{ $icon }}" style="font-size:20px;color:var(--gold)"></i>
-            <div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--text);margin-top:8px">
+            <i class="bi bi-{{ $icon }}" style="font-size: 1.25rem;color:var(--gold)"></i>
+            <div style="font-family:var(--font-display);font-size: 1.375rem;font-weight:700;color:var(--text);margin-top:8px">
                 {{ number_format($value) }}
             </div>
-            <div style="font-size:12px;color:var(--text-muted)">{{ $label }}</div>
+            <div style="font-size: 0.75rem;color:var(--text-muted)">{{ $label }}</div>
         </div>
     @endforeach
 </div>
@@ -51,17 +51,21 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="nav-avatar" style="width:30px;height:30px;font-size:12px;border-color:var(--primary)">
-                                    {{ $u->initials() }}
+                                <span class="nav-avatar" style="width:30px;height:30px;font-size: 0.75rem;border-color:var(--primary)">
+                                    @if ($u->avatarPath())
+                                        <img src="{{ $u->avatarPath() }}" alt="{{ $u->name }}">
+                                    @else
+                                        {{ $u->initials() }}
+                                    @endif
                                 </span>
                                 <span style="font-weight:600">{{ $u->name }}</span>
                             </div>
                         </td>
-                        <td style="color:var(--text-muted);font-size:13px">{{ $u->email }}</td>
+                        <td style="color:var(--text-muted);font-size: 0.8125rem">{{ $u->email }}</td>
                         <td><span @class(['badge', 'badge-primary' => $u->isAdmin(), 'badge-brown' => ! $u->isAdmin()])>{{ ucfirst($u->role) }}</span></td>
                         <td>{{ $u->total_pilgrimages }}</td>
                         <td>{{ $u->total_churches_visited }}</td>
-                        <td style="color:var(--text-muted);font-size:13px">{{ $u->created_at?->format('M j, Y') }}</td>
+                        <td style="color:var(--text-muted);font-size: 0.8125rem">{{ $u->created_at?->format('M j, Y') }}</td>
                     </tr>
                 @empty
                     <tr><td colspan="6"><x-empty-state icon="people" title="No users found" /></td></tr>

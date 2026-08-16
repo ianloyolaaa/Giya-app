@@ -29,33 +29,33 @@
         <div class="ap-head">
             <div style="position:relative">
                 <a href="{{ route('plan.index') }}"
-                   style="display:inline-flex;align-items:center;gap:4px;color:rgba(255,255,255,.7);font-size:12px;margin-bottom:10px">
+                   style="display:inline-flex;align-items:center;gap:4px;color:rgba(255,255,255,.7);font-size: 0.75rem;margin-bottom:10px">
                     <i class="bi bi-chevron-left"></i> All itineraries
                 </a>
-                <h1 style="font-family:var(--font-display);color:#fff;font-size:19px;margin:0 0 2px">{{ $itinerary->name }}</h1>
-                <p style="color:rgba(255,255,255,.7);font-size:12px;margin:0">
+                <h1 style="font-family:var(--font-display);color:#fff;font-size: 1.1875rem;margin:0 0 2px">{{ $itinerary->name }}</h1>
+                <p style="color:rgba(255,255,255,.7);font-size: 0.75rem;margin:0">
                     <span id="visitedCount">{{ $stops->where('is_visited', true)->count() }}</span>
                     of {{ $stops->count() }} stops visited
                 </p>
                 <div class="progress-track" style="margin-top:12px">
                     <div class="progress-fill" id="progressBar" style="width:{{ $itinerary->progressPercent() }}%"></div>
                 </div>
-                <div id="progressLabel" style="color:var(--gold);font-size:12px;font-weight:700;margin-top:4px">
+                <div id="progressLabel" style="color:var(--gold);font-size: 0.75rem;font-weight:700;margin-top:4px">
                     {{ $itinerary->progressPercent() }}% complete
                 </div>
             </div>
         </div>
 
         <div class="ap-banner" id="currentBanner">
-            <div style="font-size:10px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Current stop</div>
-            <div id="currentName" style="font-size:14px;font-weight:700;color:var(--text)"></div>
-            <div id="currentNext" style="font-size:11px;color:var(--primary);margin-top:4px"></div>
+            <div style="font-size: 0.625rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Current stop</div>
+            <div id="currentName" style="font-size: 0.875rem;font-weight:700;color:var(--text)"></div>
+            <div id="currentNext" style="font-size: 0.6875rem;color:var(--primary);margin-top:4px"></div>
         </div>
 
         <div class="ap-banner d-none" id="doneBanner" style="text-align:center">
-            <i class="bi bi-award-fill" style="font-size:26px;color:var(--gold)"></i>
-            <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:4px">Pilgrimage complete</div>
-            <div style="font-size:12px;color:var(--text-muted)">All {{ $stops->count() }} churches visited</div>
+            <i class="bi bi-award-fill" style="font-size: 1.625rem;color:var(--gold)"></i>
+            <div style="font-size: 0.875rem;font-weight:700;color:var(--text);margin-top:4px">Pilgrimage complete</div>
+            <div style="font-size: 0.75rem;color:var(--text-muted)">All {{ $stops->count() }} churches visited</div>
         </div>
 
         <div class="ap-list" id="stopList"></div>
@@ -165,21 +165,21 @@ const GiyaActive = (function () {
             const isCur  = cur && cur.id === s.id;
             const dotBg  = isDone ? 'var(--primary)' : (isCur ? 'var(--gold-bg)' : '#F5E8D0');
             const inner  = isDone
-                ? '<i class="bi bi-check-lg" style="color:var(--gold);font-size:15px"></i>'
-                : '<span style="font-size:11px;font-weight:700;color:' +
+                ? '<i class="bi bi-check-lg" style="color:var(--gold);font-size: 0.9375rem"></i>'
+                : '<span style="font-size: 0.6875rem;font-weight:700;color:' +
                   (isCur ? 'var(--primary)' : 'var(--text-muted)') + '">' + s.order + '</span>';
 
             return '<div class="stop-item' + (isCur ? ' is-current' : '') + '">' +
                 '<span style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;' +
                 'justify-content:center;flex-shrink:0;background:' + dotBg + '">' + inner + '</span>' +
                 '<span style="flex:1;min-width:0">' +
-                  '<span style="display:block;font-size:13px;color:' + (isDone ? 'var(--text-muted)' : 'var(--text)') +
+                  '<span style="display:block;font-size: 0.8125rem;color:' + (isDone ? 'var(--text-muted)' : 'var(--text)') +
                   ';font-weight:' + (isCur ? '700' : '500') + (isDone ? ';text-decoration:line-through' : '') + '">' +
                   s.name + '</span>' +
-                  '<span style="display:block;font-size:11px;color:var(--text-muted)">' + s.location + '</span>' +
+                  '<span style="display:block;font-size: 0.6875rem;color:var(--text-muted)">' + s.location + '</span>' +
                 '</span>' +
                 (isCur ? '<button type="button" onclick="GiyaActive.mark(' + s.id + ')" ' +
-                         'style="padding:5px 11px;border-radius:8px;font-size:11px;font-weight:700;border:none;' +
+                         'style="padding:5px 11px;border-radius:8px;font-size: 0.6875rem;font-weight:700;border:none;' +
                          'cursor:pointer;background:var(--primary);color:#fff;font-family:var(--font-body);' +
                          'flex-shrink:0">Mark</button>' : '') +
                 '</div>';
