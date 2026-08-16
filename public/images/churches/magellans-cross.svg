@@ -1,0 +1,27 @@
+<svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="500" fill="#8E3B2F"/>
+  <rect x="0" y="0" width="800" height="500" fill="url(#grad)"/>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8E3B2F;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#6B2D22;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <!-- Church silhouette -->
+  <rect x="300" y="150" width="200" height="220" fill="rgba(215,169,74,0.3)" rx="4"/>
+  <polygon points="400,80 280,160 520,160" fill="rgba(215,169,74,0.4)"/>
+  <rect x="370" y="80" width="20" height="60" fill="rgba(215,169,74,0.6)" rx="2"/>
+  <rect x="360" y="100" width="40" height="20" fill="rgba(215,169,74,0.6)" rx="2"/>
+  <!-- Cross on top -->
+  <rect x="393" y="50" width="14" height="40" fill="#D7A94A" rx="2"/>
+  <rect x="383" y="62" width="34" height="10" fill="#D7A94A" rx="2"/>
+  <!-- Windows -->
+  <ellipse cx="340" cy="220" rx="18" ry="28" fill="rgba(215,169,74,0.25)"/>
+  <ellipse cx="400" cy="200" rx="18" ry="35" fill="rgba(215,169,74,0.25)"/>
+  <ellipse cx="460" cy="220" rx="18" ry="28" fill="rgba(215,169,74,0.25)"/>
+  <!-- Door -->
+  <rect x="375" y="290" width="50" height="80" fill="rgba(36,28,24,0.5)" rx="25 25 0 0"/>
+  <!-- Text -->
+  <text x="400" y="430" font-family="Georgia,serif" font-size="18" fill="rgba(255,255,255,0.9)" text-anchor="middle" font-weight="bold">Basilica del Santo Niño</text>
+  <text x="400" y="455" font-family="sans-serif" font-size="13" fill="rgba(215,169,74,0.9)" text-anchor="middle">Cebu City · Basilica</text>
+</svg>

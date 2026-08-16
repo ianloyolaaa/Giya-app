@@ -1,0 +1,231 @@
+@extends('layouts.app')
+@section('title', 'Active Pilgrimage')
+@section('no-footer', true)
+
+@push('head')
+<style>
+    body { overflow: hidden; }
+    .active-layout { height: calc(100vh - 64px); }
+    .ap-head { background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+               padding: 20px; position: relative; overflow: hidden; flex-shrink: 0; }
+    .ap-head::after { content:''; position:absolute; top:-15px; right:-15px; width:96px; height:96px;
+                      border-radius:50%; background:var(--gold); opacity:.15; }
+    .ap-banner { padding: 14px 16px; background: var(--gold-bg);
+                 border-bottom: 1px solid rgba(142,59,47,.12); flex-shrink: 0; }
+    .ap-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .ap-list::-webkit-scrollbar { width: 4px; }
+    .ap-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+    .ap-foot { padding: 14px; border-top: 1px solid var(--border);
+               display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+    .ap-toolbar { position: absolute; bottom: 24px; right: 24px; z-index: 10;
+                  display: flex; flex-direction: column; gap: 8px; }
+</style>
+@endpush
+
+@section('content')
+<div class="active-layout">
+
+    <aside class="active-sidebar">
+        <div class="ap-head">
+            <div style="position:relative">
+                <a href="{{ route('plan.index') }}"
+                   style="display:inline-flex;align-items:center;gap:4px;color:rgba(255,255,255,.7);font-size:12px;margin-bottom:10px">
+                    <i class="bi bi-chevron-left"></i> All itineraries
+                </a>
+                <h1 style="font-family:var(--font-display);color:#fff;font-size:19px;margin:0 0 2px">{{ $itinerary->name }}</h1>
+                <p style="color:rgba(255,255,255,.7);font-size:12px;margin:0">
+                    <span id="visitedCount">{{ $stops->where('is_visited', true)->count() }}</span>
+                    of {{ $stops->count() }} stops visited
+                </p>
+                <div class="progress-track" style="margin-top:12px">
+                    <div class="progress-fill" id="progressBar" style="width:{{ $itinerary->progressPercent() }}%"></div>
+                </div>
+                <div id="progressLabel" style="color:var(--gold);font-size:12px;font-weight:700;margin-top:4px">
+                    {{ $itinerary->progressPercent() }}% complete
+                </div>
+            </div>
+        </div>
+
+        <div class="ap-banner" id="currentBanner">
+            <div style="font-size:10px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Current stop</div>
+            <div id="currentName" style="font-size:14px;font-weight:700;color:var(--text)"></div>
+            <div id="currentNext" style="font-size:11px;color:var(--primary);margin-top:4px"></div>
+        </div>
+
+        <div class="ap-banner d-none" id="doneBanner" style="text-align:center">
+            <i class="bi bi-award-fill" style="font-size:26px;color:var(--gold)"></i>
+            <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:4px">Pilgrimage complete</div>
+            <div style="font-size:12px;color:var(--text-muted)">All {{ $stops->count() }} churches visited</div>
+        </div>
+
+        <div class="ap-list" id="stopList"></div>
+
+        <div class="ap-foot">
+            <button type="button" class="btn btn-primary btn-w-full" id="markBtn" onclick="GiyaActive.markCurrent()">
+                <i class="bi bi-check-lg"></i> Mark Current Visited
+            </button>
+            <form method="POST" action="{{ route('plan.destroy', $itinerary) }}"
+                  onsubmit="return confirm('End and delete this pilgrimage? This cannot be undone.')">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-w-full">End Pilgrimage</button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="map-wrap">
+        @php
+            $points = $stops->map(fn ($s) => [
+                'id'    => $s->id,
+                'name'  => $s->church_name,
+                'lat'   => $s->church?->latitude,
+                'lng'   => $s->church?->longitude,
+                'color' => $s->is_visited ? '#6B9B5A' : ($s->church?->color() ?? '#8E3B2F'),
+                'label' => $s->stop_order,
+            ]);
+        @endphp
+
+        <x-offline-map :points="$points" :route="true" />
+
+        <div class="ap-toolbar">
+            <button type="button" class="btn btn-gold btn-sm" onclick="GiyaActive.markCurrent()">
+                <i class="bi bi-check-lg"></i> Mark Visited
+            </button>
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+<script>
+/**
+ * Active pilgrimage controller.
+ *
+ * Progress is persisted through the local Laravel API. The route map is
+ * server-rendered SVG, so the whole screen works without a network.
+ */
+const GiyaActive = (function () {
+    const stops = @json($stops->map(fn ($s) => [
+        'id' => $s->id, 'name' => $s->church_name, 'order' => $s->stop_order,
+        'visited' => (bool) $s->is_visited,
+        'location' => $s->church?->location ?? 'Cebu',
+    ])->values());
+
+    const csrf    = document.querySelector('meta[name="csrf-token"]').content;
+    const markUrl = @js(route('plan.stop.visited'));
+    const doneUrl = @js(route('plan.index'));
+
+    const visited = new Set(stops.filter(s => s.visited).map(s => s.id));
+
+    function current() {
+        return stops.find(s => !visited.has(s.id)) || null;
+    }
+
+    function paintPins() {
+        const cur = current();
+        document.querySelectorAll('.om-pin').forEach(function (pin) {
+            const id    = Number(pin.dataset.pointId);
+            const shape = pin.querySelector('path');
+            if (!shape) return;
+            if (visited.has(id))            shape.setAttribute('fill', '#6B9B5A');
+            else if (cur && cur.id === id)  shape.setAttribute('fill', '#D7A94A');
+            else                            shape.setAttribute('fill', '#8E3B2F');
+        });
+    }
+
+    function render() {
+        const total = stops.length;
+        const done  = visited.size;
+        const pct   = total ? Math.round((done / total) * 100) : 0;
+        const cur   = current();
+        const next  = cur ? stops[stops.indexOf(cur) + 1] : null;
+
+        document.getElementById('visitedCount').textContent  = done;
+        document.getElementById('progressBar').style.width   = pct + '%';
+        document.getElementById('progressLabel').textContent = pct + '% complete';
+
+        const banner  = document.getElementById('currentBanner');
+        const doneB   = document.getElementById('doneBanner');
+        const markBtn = document.getElementById('markBtn');
+
+        if (cur) {
+            banner.classList.remove('d-none');
+            doneB.classList.add('d-none');
+            markBtn.classList.remove('d-none');
+            document.getElementById('currentName').textContent = cur.name;
+            document.getElementById('currentNext').textContent =
+                next ? 'Next → ' + next.name : 'Final stop of your route';
+        } else {
+            banner.classList.add('d-none');
+            doneB.classList.remove('d-none');
+            markBtn.classList.add('d-none');
+        }
+
+        document.getElementById('stopList').innerHTML = stops.map(function (s) {
+            const isDone = visited.has(s.id);
+            const isCur  = cur && cur.id === s.id;
+            const dotBg  = isDone ? 'var(--primary)' : (isCur ? 'var(--gold-bg)' : '#F5E8D0');
+            const inner  = isDone
+                ? '<i class="bi bi-check-lg" style="color:var(--gold);font-size:15px"></i>'
+                : '<span style="font-size:11px;font-weight:700;color:' +
+                  (isCur ? 'var(--primary)' : 'var(--text-muted)') + '">' + s.order + '</span>';
+
+            return '<div class="stop-item' + (isCur ? ' is-current' : '') + '">' +
+                '<span style="width:32px;height:32px;border-radius:50%;display:flex;align-items:center;' +
+                'justify-content:center;flex-shrink:0;background:' + dotBg + '">' + inner + '</span>' +
+                '<span style="flex:1;min-width:0">' +
+                  '<span style="display:block;font-size:13px;color:' + (isDone ? 'var(--text-muted)' : 'var(--text)') +
+                  ';font-weight:' + (isCur ? '700' : '500') + (isDone ? ';text-decoration:line-through' : '') + '">' +
+                  s.name + '</span>' +
+                  '<span style="display:block;font-size:11px;color:var(--text-muted)">' + s.location + '</span>' +
+                '</span>' +
+                (isCur ? '<button type="button" onclick="GiyaActive.mark(' + s.id + ')" ' +
+                         'style="padding:5px 11px;border-radius:8px;font-size:11px;font-weight:700;border:none;' +
+                         'cursor:pointer;background:var(--primary);color:#fff;font-family:var(--font-body);' +
+                         'flex-shrink:0">Mark</button>' : '') +
+                '</div>';
+        }).join('');
+
+        paintPins();
+    }
+
+    function mark(stopId) {
+        if (visited.has(stopId)) return;
+
+        fetch(markUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ stop_id: stopId }),
+        })
+        .then(response => response.ok ? response.json() : Promise.reject(response))
+        .then(function (data) {
+            visited.add(stopId);
+            render();
+            if (data.all_done) {
+                setTimeout(function () {
+                    if (confirm('Pilgrimage complete. View your saved itineraries?')) {
+                        window.location = doneUrl;
+                    }
+                }, 350);
+            }
+        })
+        .catch(function () {
+            alert('Could not save that stop. Make sure the local server is running and try again.');
+        });
+    }
+
+    render();
+
+    return {
+        mark: mark,
+        markCurrent: function () {
+            const cur = current();
+            if (cur) mark(cur.id);
+        },
+    };
+})();
+</script>
+@endpush

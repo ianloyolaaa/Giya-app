@@ -1,0 +1,39 @@
+name,location,category,description,address,latitude,longitude,opening_time,closing_time,rating,is_featured
+Basilica Minore del Santo Niño,Cebu City,Basilica,"The oldest Roman Catholic church in the Philippines, home to the sacred image of the Holy Child Jesus.","Osmeña Blvd, Cebu City",10.29390,123.90190,05:00,20:00,4.9,true
+Cebu Metropolitan Cathedral,Cebu City,Cathedral,"Seat of the Roman Catholic Archdiocese of Cebu.","D. Jakosalem St, Cebu City",10.29642,123.90200,06:00,19:00,4.6,true
+Magellan's Cross Chapel,Cebu City,Heritage,"Cross planted by Ferdinand Magellan in 1521, marking the arrival of Christianity in the Philippines.","P. Burgos St, Cebu City",10.29364,123.90227,08:00,18:00,4.7,true
+Monastery of the Holy Eucharist (Simala Shrine),"Sibonga, Cebu",Shrine,"Castle-like Marian shrine on a hilltop, a major pilgrimage destination in southern Cebu.","Lindogon, Sibonga, Cebu",10.03060,123.55440,06:00,18:00,4.8,true
+San Pedro Calungsod Chapel,Cebu City,Shrine,"Chapel honouring San Pedro Calungsod, the second Filipino saint.","Archbishop Reyes Ave, Cebu City",10.31530,123.89170,06:00,19:00,4.7,false
+Redemptorist Church (Our Mother of Perpetual Help),Cebu City,Church,"Home of the Perpetual Help novena, one of the most attended devotions in Cebu.","Queen City Ave, Cebu City",10.29790,123.88950,05:30,20:00,4.6,false
+Sto. Rosario Parish Church,Cebu City,Church,"Parish church beside the University of San Carlos main campus.","P. del Rosario St, Cebu City",10.29940,123.89480,06:00,19:00,4.4,false
+San Nicolas de Tolentino Parish,Cebu City,Church,"One of the oldest parishes in Cebu City, established in the Spanish era.","San Nicolas, Cebu City",10.28920,123.88700,06:00,18:00,4.3,false
+Our Lady of Guadalupe de Cebu Parish,Cebu City,Church,"Marian parish in the Guadalupe district, known for its hillside setting.","Guadalupe, Cebu City",10.31160,123.87700,06:00,18:30,4.5,false
+Sacred Heart Parish,Cebu City,Church,"Jesuit-run parish along General Maxilom Avenue.","Gen. Maxilom Ave, Cebu City",10.31030,123.89660,06:00,19:00,4.5,false
+Sto. Tomas de Villanueva Parish (Pardo),"Pardo, Cebu City",Church,"Heritage parish serving the Pardo district.","Pardo, Cebu City",10.27590,123.86390,06:00,18:00,4.3,false
+Nuestra Señora de la Luz Parish,"Mabolo, Cebu City",Church,"Parish church of the Mabolo district.","Mabolo, Cebu City",10.31700,123.91060,06:00,18:30,4.4,false
+St. Joseph the Patriarch Parish,Mandaue City,Church,"Principal parish of Mandaue, known for its heritage retablo.","S.B. Cabahug St, Mandaue City",10.32410,123.94150,05:30,19:00,4.5,false
+Nuestra Señora de la Regla Parish,Lapu-Lapu City,Church,"Historic parish of Opon, patroness of Lapu-Lapu City.","Poblacion, Lapu-Lapu City",10.31090,123.94990,05:30,19:00,4.5,false
+St. Francis of Assisi Parish (Naga Cebu),Naga City Cebu,Church,"Parish church at the centre of Naga City, southern Cebu.","Poblacion, Naga, Cebu",10.20890,123.75810,06:00,18:00,4.3,false
+Nuestra Señora del Pilar Parish (Talisay),"Talisay City, Cebu",Church,"Coastal parish serving Talisay City.","Poblacion, Talisay City, Cebu",10.24460,123.84990,06:00,18:30,4.4,false
+St. Michael the Archangel Parish,"Argao, Cebu",Heritage,"Fortified Spanish-era church complex, a National Cultural Treasure.","Poblacion, Argao, Cebu",9.87840,123.60600,06:00,18:00,4.7,false
+Immaculate Conception Parish,"Boljoon, Cebu",Heritage,"Boljoon church, among the best-preserved Spanish colonial churches in Cebu.","Poblacion, Boljoon, Cebu",9.62760,123.47950,06:00,18:00,4.7,false
+Our Lady of the Immaculate Conception Parish (Carcar),"Carcar City, Cebu",Heritage,"Landmark hilltop church overlooking the Carcar rotunda.","Poblacion, Carcar City, Cebu",10.10630,123.63970,06:00,18:00,4.6,false
+St. Catherine of Alexandria Parish,"Carcar City, Cebu",Church,"Parish serving the Carcar heritage district.","Carcar City, Cebu",10.10510,123.64220,06:00,18:00,4.4,false
+Sto. Tomas de Villanueva Parish (Danao),"Danao City, Cebu",Church,"Principal parish of Danao City in northern Cebu.","Poblacion, Danao City, Cebu",10.52080,124.02650,06:00,18:00,4.4,false
+St. James the Greater Parish,"Compostela, Cebu",Church,"Parish church of Compostela, northern Cebu.","Poblacion, Compostela, Cebu",10.45510,124.01440,06:00,18:00,4.2,false
+Nuestra Señora del Pilar Parish (Liloan),"Liloan, Cebu",Church,"Parish beside the historic Bagacay Point lighthouse town.","Poblacion, Liloan, Cebu",10.39710,123.99880,06:00,18:00,4.3,false
+St. Joseph Parish,"Consolacion, Cebu",Church,"Growing parish serving the Consolacion municipality.","Poblacion, Consolacion, Cebu",10.37610,123.95820,06:00,18:00,4.2,false
+Our Lady of the Rule Parish,"Minglanilla, Cebu",Church,"Parish church of Minglanilla, southern metro Cebu.","Poblacion, Minglanilla, Cebu",10.24540,123.79640,06:00,18:00,4.3,false
+St. Gregory the Great Parish,"Sibonga, Cebu",Heritage,"Spanish-era parish church in the Sibonga poblacion.","Poblacion, Sibonga, Cebu",10.02180,123.59150,06:00,18:00,4.5,false
+Sta. Rosa de Lima Parish (Dalaguete),"Dalaguete, Cebu",Heritage,"Fortified church and plaza complex in Dalaguete.","Poblacion, Dalaguete, Cebu",9.76140,123.53410,06:00,18:00,4.6,false
+St. Francis of Assisi Parish (Oslob),"Oslob, Cebu",Heritage,"Coral-stone church beside the Oslob heritage ruins.","Poblacion, Oslob, Cebu",9.51280,123.43140,06:00,18:00,4.5,false
+Our Lady of the Immaculate Conception Parish (Santander),"Santander, Cebu",Church,"Southernmost mainland parish in Cebu province.","Poblacion, Santander, Cebu",9.42500,123.33330,06:00,18:00,4.2,false
+St. Vincent Ferrer Parish,"Bogo City, Cebu",Church,"Principal parish of Bogo City in northern Cebu.","Poblacion, Bogo City, Cebu",11.04700,124.00500,06:00,18:00,4.3,false
+Sta. Rosa de Lima Parish (Bantayan Island),"Bantayan Island, Cebu",Heritage,"One of the three oldest parishes in Cebu, on Bantayan Island.","Poblacion, Bantayan, Cebu",11.16780,123.72280,06:00,18:00,4.6,false
+St. Peter and St. Paul Parish,"Bantayan Island, Cebu",Church,"Parish serving the Madridejos community on Bantayan Island.","Madridejos, Cebu",11.26720,123.72440,06:00,18:00,4.2,false
+Our Lady of the Assumption Parish,"Toledo City, Cebu",Church,"Principal parish of Toledo City on the western coast.","Poblacion, Toledo City, Cebu",10.37760,123.63860,06:00,18:00,4.3,false
+St. John the Baptist Parish,"Balamban, Cebu",Church,"Parish church of Balamban on the western seaboard.","Poblacion, Balamban, Cebu",10.50440,123.71600,06:00,18:00,4.2,false
+Our Lady of the Sacred Heart Parish,"Barili, Cebu",Church,"Parish church at the centre of Barili town.","Poblacion, Barili, Cebu",10.11750,123.51190,06:00,18:00,4.3,false
+St. Anthony of Padua Parish,"Moalboal, Cebu",Church,"Parish serving the Moalboal coastal community.","Poblacion, Moalboal, Cebu",9.94170,123.40000,06:00,18:00,4.2,false
+Our Lady of the Pillar Parish,"Cordova, Cebu",Church,"Parish church of Cordova on Mactan Island.","Poblacion, Cordova, Cebu",10.25150,123.94900,06:00,18:00,4.2,false
+Birhen sa Regla Parish,"Talisay City, Cebu",Church,"Devotional parish in the Talisay district.","Talisay City, Cebu",10.25010,123.83500,06:00,18:00,4.2,false
