@@ -20,8 +20,6 @@
                 </span>
             @endif
             <div style="flex:1;min-width:220px">
-                <h1 style="...">{{ $user->name }}</h1>
-            <div style="flex:1;min-width:220px">
                 <h1 style="font-family:var(--font-display);color:#fff;font-size:26px;line-height:1.2;margin:0">{{ $user->name }}</h1>
                 <p style="color:rgba(255,255,255,0.7);font-size:13px;margin:3px 0 0">{{ $user->email }}</p>
                 <p class="d-flex align-items-center gap-1" style="color:rgba(255,255,255,0.55);font-size:12px;margin:5px 0 0">
@@ -278,6 +276,7 @@
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <i class="bi bi-globe2" style="color:var(--gold)"></i>
                     <span style="font-size:15px;font-weight:700;color:var(--text)">Language</span>
+                    <span class="pref-soon">Coming soon</span>
                 </div>
 
                 <label class="form-label-sm" for="pref-language">Display Language</label>
@@ -287,7 +286,8 @@
                     @endforeach
                 </select>
                 <p style="font-size:12px;color:var(--text-muted);margin:6px 0 0">
-                    This changes the language used across the entire platform.
+                    Your choice is saved now. Cebuano and Filipino translations are still
+                    being prepared, so the interface stays in English for the moment.
                 </p>
             </div>
 
@@ -354,6 +354,8 @@
         </div>
     </section>
 
+</div>{{-- /panel wrapper --}}
+
 {{-- ───────────────────────────── Modals ─────────────────────────────── --}}
 <div class="modal" id="editProfileModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
@@ -383,6 +385,21 @@
                     </div>
                     @error('avatar')<span class="field-error">{{ $message }}</span>@enderror
                 </div>
+
+                <div class="field">
+                    <label class="form-label-sm" for="pf-name">Full Name</label>
+                    <input id="pf-name" type="text" name="name" class="giya-input"
+                           value="{{ old('name', $user->name) }}" maxlength="100" required>
+                    @error('name')<span class="field-error">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="field">
+                    <label class="form-label-sm" for="pf-email">Email Address</label>
+                    <input id="pf-email" type="email" name="email" class="giya-input"
+                           value="{{ old('email', $user->email) }}" maxlength="150" required>
+                    @error('email')<span class="field-error">{{ $message }}</span>@enderror
+                </div>
+
                 <div class="modal-actions">
                     <button type="submit" class="btn btn-primary" style="flex:1">Save Changes</button>
                     <button type="button" class="btn btn-outline" style="flex:1" data-modal-close>Cancel</button>
@@ -499,7 +516,6 @@
 </style>
 @endpush
 
-@push('scripts')
 @push('scripts')
 <script>
 const GiyaProfile = {

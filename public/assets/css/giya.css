@@ -968,3 +968,16 @@ html[data-theme="dark"] img[src$=".svg"] { filter: brightness(1.6); }
 }
 .fav-btn:hover { transform: scale(1.1); }
 .fav-btn.is-saved { color: #D4183D; }
+/* ── "Coming soon" tag on a preference that saves but has no effect yet ── */
+.pref-soon {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
