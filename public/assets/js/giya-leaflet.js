@@ -146,7 +146,8 @@ window.GiyaLeaflet = (function () {
             markers[c.id] = m;
         });
 
-        if (churches.length) {
+        function frameAll() {
+            if (!churches.length) return;
             map.fitBounds(L.latLngBounds(churches.map(function (c) {
                 return [c.lat, c.lng];
             })).pad(0.18));
@@ -298,11 +299,13 @@ window.GiyaLeaflet = (function () {
                    '&travelmode=driving';
         }
 
-        setTimeout(function () { map.invalidateSize(); }, 200);
+        // Size first, then frame — fitBounds against a stale size picks the
+        // wrong centre and zoom.
+        setTimeout(function () { map.invalidateSize(); frameAll(); }, 200);
         window.addEventListener('resize', function () { map.invalidateSize(); });
 
         return {
-            map: map, locate: locate, focus: focus,
+            map: map, locate: locate, focus: focus, frameAll: frameAll,
             addStop: addStop, removeStop: removeStop, clearRoute: clearRoute,
             externalDirections: externalDirections,
             selected: function () { return selected.slice(); },

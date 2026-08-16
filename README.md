@@ -1,181 +1,134 @@
-# GIYA — Localized Pilgrimage Companion for Metro Cebu
+# GIYA
 
-Laravel 13 + PostgreSQL implementation of the GIYA capstone project.
-The application runs entirely offline after installation: no CDN, no
-remote fonts, no tile server, no third-party JavaScript.
+Laravel 13 + PostgreSQL. A localized travel companion for religious tourism and
+pilgrimage in Metro Cebu.
 
 ---
 
-## Installation
+## Run it on a new laptop
+
+**Install first:** PHP 8.3+, Composer 2, PostgreSQL 16+, Git.
+
+**Enable the PHP extensions.** Run `php --ini`, open that file, uncomment:
+
+```ini
+extension=pdo_pgsql
+extension=pgsql
+extension=fileinfo
+extension=gd
+```
+
+Check with `php -m`. All four must appear.
+
+**Then:**
 
 ```bash
-# 1. Copy these folders into your existing Laravel project
-#    (app/, database/, resources/, routes/, bootstrap/, public/)
+git clone <repo-url> Giya-app
+cd Giya-app
+composer install
 
-# 2. Environment
-cp .env.example .env
+cp .env.example .env          # PowerShell: Copy-Item .env.example .env
 php artisan key:generate
+```
 
-# 3. Create the database in PostgreSQL
-#    CREATE DATABASE giya_db;
+**Create the database** in psql or pgAdmin:
 
-# 4. Schema and seed data
+```sql
+CREATE DATABASE giya_db;
+```
+
+**Set your password** in `.env`:
+
+```env
+DB_DATABASE=giya_db
+DB_USERNAME=postgres
+DB_PASSWORD=your_postgres_password
+```
+
+**Finish:**
+
+```bash
 php artisan migrate --seed
-
-# 5. Clear caches and run
-php artisan optimize:clear
+php artisan storage:link
+php artisan giya:tiles         # offline map tiles, 15-20 min
 php artisan serve
 ```
 
-Open `http://localhost:8000`.
+Open http://127.0.0.1:8000
 
-### Seeded accounts
-
-| Role  | Email                     | Password    |
-|-------|---------------------------|-------------|
-| Admin | admin@giya.app            | `Admin@123` |
-| User  | maria.santos@email.com    | `User@123`  |
+| Role  | Email                  | Password    |
+|-------|------------------------|-------------|
+| Admin | admin@giya.app         | `Admin@123` |
+| User  | maria.santos@email.com | `User@123`  |
 
 ---
 
-## Optional: install the display fonts
+## When it breaks
 
-The design uses Playfair Display for headings and Lato for body text.
-The stylesheet declares them via `@font-face` with a Georgia / system-ui
-fallback, so the app renders correctly even if the files are absent.
+| Error | Fix |
+|---|---|
+| `could not find driver` | Extensions not enabled, or wrong `php.ini` |
+| `password authentication failed` | Fix `.env`, then `php artisan config:clear` |
+| `Connection refused` | PostgreSQL service not running |
+| `No application encryption key` | `php artisan key:generate` |
+| `relation "..." does not exist` | Wrong database in `.env`, or `migrate` not run |
+| Images 404 | `php artisan storage:link` |
+| Blank map | `php artisan giya:tiles` |
+| "Find my location" does nothing | Use `127.0.0.1`, not a LAN IP — geolocation needs HTTPS or localhost |
+| Changes not showing | `php artisan view:clear` |
 
-To install them, download the four `.woff2` files into
-`public/assets/fonts/` with these exact names:
-
-```
-playfair-display-400.woff2
-playfair-display-700.woff2
-lato-400.woff2
-lato-700.woff2
-```
-
-Verify each file is roughly 15 KB or larger. A file of a few hundred
-bytes means the download failed and the fallback font will be used.
+Keep **one** database. Spares from earlier attempts cause errors that look like
+code faults.
 
 ---
 
-## Optional: replace the destination artwork
+## After `git pull`
 
-`public/images/churches/` ships with generated SVG artwork. To use real
-photographs, drop `.jpg` files named after the slugified church name:
-
+```bash
+composer install
+php artisan migrate
+php artisan view:clear
 ```
-public/images/churches/basilica-del-santo-nino.jpg
-public/images/churches/simala-shrine.jpg
-public/images/churches/magellans-cross-chapel.jpg
-public/images/churches/cebu-metropolitan-cathedral.jpg
-```
-
-`Church::imagePath()` prefers `.jpg` over `.svg`, so no code change is
-needed — the new photos appear as soon as the files exist.
 
 ---
 
-## Architecture
+## Layout
 
 ```
-app/
-  Models/                 8 Eloquent models, all mapped to the existing schema
-  Http/Controllers/       Page controllers + Auth/ + Admin/
-  Http/Middleware/        AdminMiddleware (role gate)
-
-database/
-  migrations/             4 migrations, PostgreSQL CHECK constraints
-  seeders/                10 Metro Cebu destinations, 5 schedules, 2 accounts
-
-resources/views/
-  layouts/                app · auth · admin
-  components/             navbar, footer, flash, church-card, stars,
-                          empty-state, pagination, offline-map,
-                          line-chart, bar-chart
-  auth/  plan/  admin/    page templates
-
-public/
-  assets/css/giya.css         design system + utilities
-  assets/css/giya-icons.css   70 icons as inline SVG masks
-  assets/js/giya.js           modal, password toggle, mobile nav
-  images/                     logo · icons · churches · backgrounds · avatars
+app/Models/              16 models, one per ERD entity
+app/Console/Commands/    giya:tiles — offline tile downloader
+database/migrations/     full ERD schema
+public/assets/js/        leaflet.js (self-hosted) + giya-leaflet.js
+public/tiles/            offline map tiles
+public/assets/css/       giya.css (design system + dark theme)
 ```
 
-### Notable decisions
+**Design decisions worth defending:**
 
-**No third-party front-end dependencies.** Bootstrap, Bootstrap Icons,
-Leaflet and Chart.js were each replaced with a purpose-built equivalent
-so the application has nothing to fetch at runtime:
-
-- *Icons* are CSS `mask-image` data-URIs keyed to `.bi-*` class names.
-- *Modals* are handled by `GiyaUI.Modal` with `data-modal-open` /
-  `data-modal-close` triggers, Escape and backdrop dismissal.
-- *Charts* are server-rendered SVG (`<x-line-chart>`, `<x-bar-chart>`)
-  built from data the controller already aggregated.
-- *Maps* are server-rendered SVG (`<x-offline-map>`) using an
-  equirectangular projection of the latitude/longitude stored in the
-  `churches` table. Pins, routes, labels and click-to-select all work
-  with the machine disconnected.
-
-**Mail is offline by default.** `.env.example` sets `MAIL_MAILER=log`, so
-password-reset links are written to `storage/logs/laravel.log` rather
-than sent over the network. Switch to `smtp` when a mail server is
-available; the controller already handles send failures gracefully.
-
-**The `is_walked_in` field does not exist in this project.** A
-project-wide search found no occurrences in the schema, models,
-controllers, views or the Profile section. The boolean columns that do
-exist are `is_visited`, `is_premium`, `is_featured`, `is_active` and
-`is_recurring`, none of which are walk-in related. No drop migration
-was required.
+- Counters like `rating` and `total_churches_visited` are computed from related
+  tables, not stored — they cannot drift out of sync.
+- Font sizes are in `rem`, so the Preferences size setting actually rescales the UI.
+- CSS and JS carry `?v=filemtime(...)`, so edits appear without a hard refresh.
+- Leaflet, fonts and icons are self-hosted; nothing loads from a CDN.
 
 ---
 
-## Routes
+## Limitations
 
-All internal navigation resolves through named routes. No route or link
-points at an external service.
+For the manuscript:
 
-| Route name          | Method | URI                       |
-|---------------------|--------|---------------------------|
-| `login`             | GET    | /login                    |
-| `register`          | GET    | /register                 |
-| `password.request`  | GET    | /forgot-password          |
-| `password.reset`    | GET    | /reset-password/{token}   |
-| `home`              | GET    | /home                     |
-| `map`               | GET    | /map                      |
-| `chatbot`           | GET    | /chatbot                  |
-| `profile`           | GET    | /profile                  |
-| `profile.update`    | PATCH  | /profile                  |
-| `profile.password`  | PATCH  | /profile/password         |
-| `plan.hub`          | GET    | /plan                     |
-| `plan.create`       | GET    | /plan/create              |
-| `plan.visita`       | GET    | /plan/visita-iglesia      |
-| `plan.index`        | GET    | /plan/my-itineraries      |
-| `plan.store`        | POST   | /plan                     |
-| `plan.stop.visited` | POST   | /plan/stop/visited        |
-| `plan.show`         | GET    | /plan/{itinerary}         |
-| `plan.destroy`      | DELETE | /plan/{itinerary}         |
-| `admin.dashboard`   | GET    | /admin                    |
-| `admin.users`       | GET    | /admin/users              |
-| `admin.destinations`| GET    | /admin/destinations       |
-| `admin.schedules`   | GET    | /admin/schedules          |
-| `admin.feedback`    | GET    | /admin/feedback           |
-| `admin.transactions`| GET    | /admin/transactions       |
+- Routes are straight lines with distances, not driving directions. Turn-by-turn
+  hands off to Google Maps and needs a connection.
+- Language preference saves but does not translate yet — no `lang/` files.
+- Uploaded images sit on local disk; they vanish on redeploy on hosts like Render.
+- Two additions beyond the original ERD: `devotee_preferences` and
+  `churches.address`. **Both need adding to the diagram and Data Dictionary.**
 
 ---
 
-## Offline verification
+## Before the defence
 
-Disconnect the machine, then confirm:
-
-- [ ] `php artisan serve` starts and `/login` renders with full styling
-- [ ] Sign in works; the navbar, icons and avatars all display
-- [ ] `/map` draws the destination map with pins and labels
-- [ ] Sidebar search and category filters respond
-- [ ] `/plan/create` builds a route and saves it
-- [ ] `/plan/{id}` shows the route map and marks stops visited
-- [ ] `/profile` opens both modals and saves changes
-- [ ] `/admin` renders both charts
-- [ ] The browser console reports no failed requests
+Disconnect from the internet and confirm: login renders styled, `/map` draws
+tiles and pins, routes build, `/plan/create` saves, `/profile` switches theme and
+font size, `/admin/destinations` shows the picker map, and the browser console is
+clean.

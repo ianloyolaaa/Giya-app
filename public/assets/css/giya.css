@@ -1240,3 +1240,23 @@ html[data-theme="dark"] .dm-drop-circle { background: var(--surface); border-col
   .dm-map-side { flex: 1 1 100%; }
   .dm-btn-wide { flex: 1 1 100%; }
 }
+
+/* ── Map category chips ──────────────────────────────────────
+   These sit on a white card, so they cannot reuse .btn-ghost —
+   that class is white-on-transparent, meant for the dark hero.
+*/
+.cat-chip {
+  font-family: var(--font-body);
+  font-size: 0.8125rem; font-weight: 700;
+  padding: 7px 14px; border-radius: var(--radius-md);
+  background: var(--bg-secondary);
+  color: var(--text);
+  border: 1px solid var(--border);
+  cursor: pointer; white-space: nowrap;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.cat-chip:hover { border-color: var(--gold); }
+.cat-chip.is-active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.cat-chip:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }

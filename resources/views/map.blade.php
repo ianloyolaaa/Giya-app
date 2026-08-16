@@ -40,7 +40,7 @@
             <div class="d-flex gap-1 flex-wrap" style="margin-bottom:14px">
                 @foreach ($categories as $category)
                     <button type="button"
-                            @class(['btn', 'btn-sm', $loop->first ? 'btn-primary' : 'btn-ghost', 'cat-chip'])
+                            @class(['cat-chip', 'is-active' => $loop->first])
                             data-cat="{{ $category }}">{{ $category }}</button>
                 @endforeach
             </div>
@@ -152,7 +152,9 @@
 
         listBox.innerHTML = list.map(function (c) {
             return '<div class="history-item" data-church="' + c.id + '" style="cursor:pointer">' +
-                '<img src="' + c.image + '" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex-shrink:0">' +
+                '<img src="' + c.image + '" alt="" loading="lazy" ' +
+                     'onerror="this.style.background=\'var(--gold-bg)\';this.removeAttribute(\'src\')" ' +
+                     'style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--gold-bg)">' +
                 '<div style="flex:1;min-width:0">' +
                     '<div style="font-size: 0.8125rem;font-weight:700;color:var(--text)">' + c.name + '</div>' +
                     '<div style="font-size: 0.6875rem;color:var(--text-muted)">' +
@@ -176,9 +178,9 @@
     document.querySelectorAll('.cat-chip').forEach(function (btn) {
         btn.addEventListener('click', function () {
             document.querySelectorAll('.cat-chip').forEach(function (b) {
-                b.classList.remove('btn-primary'); b.classList.add('btn-ghost');
+                b.classList.remove('is-active');
             });
-            this.classList.remove('btn-ghost'); this.classList.add('btn-primary');
+            this.classList.add('is-active');
             category = this.dataset.cat;
             renderList();
         });
