@@ -56,10 +56,7 @@ php artisan serve
 
 Open http://127.0.0.1:8000
 
-| Role  | Email                  | Password    |
-|-------|------------------------|-------------|
-| Admin | admin@giya.app         | `Admin@123` |
-| User  | maria.santos@email.com | `User@123`  |
+
 
 ---
 
