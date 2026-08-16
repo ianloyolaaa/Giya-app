@@ -25,7 +25,7 @@ class Church extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'category_id', 'name', 'location', 'description',
+        'category_id', 'name', 'location', 'address', 'description',
         'latitude', 'longitude', 'opening_time', 'closing_time',
         'is_featured', 'is_active', 'created_at', 'updated_at',
     ];
@@ -195,6 +195,18 @@ class Church extends Model
         'Chapel'    => '#9B6B4A',
         'Heritage'  => '#6B7280',
     ];
+
+    /** "5:00 AM - 8:00 PM", or a fallback when hours are not set. */
+    public function getHoursLabelAttribute(): string
+    {
+        if (! $this->opening_time || ! $this->closing_time) {
+            return 'Hours not listed';
+        }
+
+        return date('g:i A', strtotime($this->opening_time))
+             . ' - '
+             . date('g:i A', strtotime($this->closing_time));
+    }
 
     public function color(): string
     {

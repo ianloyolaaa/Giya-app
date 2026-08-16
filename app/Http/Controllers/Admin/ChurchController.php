@@ -8,79 +8,118 @@ use App\Models\ChurchCategory;
 use App\Models\ChurchImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ChurchController extends Controller
 {
     public function index(Request $request): View
     {
-        $churches = Church::query()
-            ->when($request->search, fn ($q, $s) => $q->where('name', 'ilike', "%{$s}%"))
+        $churches = Church::with('churchCategory', 'primaryImage')
+            ->search($request->search)
             ->when($request->category && $request->category !== 'All',
                 fn ($q, $c) => $q->ofCategory($c))
+            ->when($request->status === 'active', fn ($q) => $q->where('is_active', true))
+            ->when($request->status === 'hidden', fn ($q) => $q->where('is_active', false))
             ->orderBy('name')
-            ->paginate(12)
-            ->withQueryString();
+            ->paginate(10);
+
+        $all = Church::with('churchCategory', 'primaryImage')->get();
 
         return view('admin.destinations', [
             'churches'   => $churches,
             'search'     => $request->search,
             'category'   => $request->category ?? 'All',
             'categories' => ChurchCategory::orderBy('name')->pluck('name')->prepend('All')->all(),
+
+            // Pins on the picker map.
+            'markers' => $all
+                ->filter(fn (Church $c) => $c->latitude && $c->longitude)
+                ->map(fn (Church $c) => [
+                    'id'     => $c->id,
+                    'name'   => $c->name,
+                    'lat'    => (float) $c->latitude,
+                    'lng'    => (float) $c->longitude,
+                    'image'  => $c->imagePath(),
+                    'color'  => $c->color(),
+                    'active' => (bool) $c->is_active,
+                ])->values()->all(),
+
+            // Full records so clicking edit fills the form without another request.
+            'rows' => $all->map(fn (Church $c) => [
+                'id'          => $c->id,
+                'name'        => $c->name,
+                'category'    => $c->category,
+                'location'    => $c->location,
+                'address'     => $c->address,
+                'lat'         => $c->latitude ? (float) $c->latitude : null,
+                'lng'         => $c->longitude ? (float) $c->longitude : null,
+                'open'        => $c->opening_time ? substr($c->opening_time, 0, 5) : '',
+                'close'       => $c->closing_time ? substr($c->closing_time, 0, 5) : '',
+                'description' => $c->description,
+                'image'       => $c->imagePath(),
+                'active'      => (bool) $c->is_active,
+            ])->values()->all(),
         ]);
     }
 
+    /** Handles both create and update — the form posts church_id when editing. */
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'        => ['required', 'string', 'max:200'],
-            'location'    => ['required', 'string', 'max:200'],
-            'category'    => ['required', 'in:Basilica,Cathedral,Shrine,Church,Chapel,Heritage'],
-            'description' => ['nullable', 'string'],
-            'latitude'    => ['nullable', 'numeric', 'between:-90,90'],
-            'longitude'   => ['nullable', 'numeric', 'between:-180,180'],
-            'opening_time'=> ['nullable', 'date_format:H:i'],
-            'closing_time'=> ['nullable', 'date_format:H:i'],
-            'photo'       => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
-            'caption'     => ['nullable', 'string', 'max:255'],
+            'church_id'    => ['nullable', 'integer', 'exists:churches,id'],
+            'name'         => ['required', 'string', 'max:200'],
+            'location'     => ['required', 'string', 'max:200'],
+            'address'      => ['nullable', 'string', 'max:255'],
+            'category'     => ['required', 'string', 'exists:church_categories,name'],
+            'status'       => ['nullable', 'in:Published,Draft'],
+            'description'  => ['nullable', 'string'],
+            'latitude'     => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'    => ['nullable', 'numeric', 'between:-180,180'],
+            'opening_time' => ['nullable', 'date_format:H:i'],
+            'closing_time' => ['nullable', 'date_format:H:i'],
+            'photo'        => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
+            'caption'      => ['nullable', 'string', 'max:255'],
         ], [
             'photo.image' => 'Choose an image file (JPG, PNG, or WEBP).',
             'photo.max'   => 'Keep the photo under 4 MB.',
         ]);
 
-        // The ERD stores the category as a foreign key, not a string.
         $category = ChurchCategory::firstOrCreate(
             ['name' => $data['category']],
             ['created_at' => now(), 'updated_at' => now()]
         );
 
-        $photo   = $request->file('photo');
-        $caption = $data['caption'] ?? null;
-        unset($data['category'], $data['photo'], $data['caption']);
+        $fields = [
+            'category_id'  => $category->id,
+            'name'         => $data['name'],
+            'location'     => $data['location'],
+            'address'      => $data['address'] ?? null,
+            'description'  => $data['description'] ?? null,
+            'latitude'     => $data['latitude'] ?? null,
+            'longitude'    => $data['longitude'] ?? null,
+            'opening_time' => $data['opening_time'] ?? null,
+            'closing_time' => $data['closing_time'] ?? null,
+            'is_active'    => ($data['status'] ?? 'Published') === 'Published',
+            'updated_at'   => now(),
+        ];
 
-        $church = Church::create($data + [
-            'category_id' => $category->id,
-            'is_active'   => true,
-            'created_at'  => now(),
-            'updated_at'  => now(),
-        ]);
-
-        if ($photo) {
-            ChurchImage::create([
-                'church_id'   => $church->id,
-                'image_url'   => 'storage/' . $photo->store('churches', 'public'),
-                'caption'     => $caption ?: $church->name,
-                'is_primary'  => true,
-                'uploaded_at' => now(),
-                'created_at'  => now(),
-            ]);
+        if (! empty($data['church_id'])) {
+            $church = Church::findOrFail($data['church_id']);
+            $church->update($fields);
+            $message = $church->name.' updated.';
+        } else {
+            $church = Church::create($fields + ['created_at' => now()]);
+            $message = $church->name.' added.';
         }
 
-        return back()->with('success', 'Destination added.');
+        if ($request->hasFile('photo')) {
+            $this->replacePhoto($church, $request->file('photo'), $data['caption'] ?? null);
+        }
+
+        return back()->with('success', $message);
     }
 
-    /** Replace the main photo of an existing destination. */
     public function updatePhoto(Request $request, Church $church): RedirectResponse
     {
         $request->validate([
@@ -88,6 +127,21 @@ class ChurchController extends Controller
             'caption' => ['nullable', 'string', 'max:255'],
         ]);
 
+        $this->replacePhoto($church, $request->file('photo'), $request->caption);
+
+        return back()->with('success', 'Photo updated for '.$church->name.'.');
+    }
+
+    public function toggle(Church $church): RedirectResponse
+    {
+        $church->update(['is_active' => ! $church->is_active, 'updated_at' => now()]);
+
+        return back()->with('success', $church->name.($church->is_active ? ' published.' : ' moved to draft.'));
+    }
+
+    /** Swap the primary image, deleting the file the old row pointed at. */
+    protected function replacePhoto(Church $church, $file, ?string $caption): void
+    {
         foreach ($church->images()->where('is_primary', true)->get() as $old) {
             if (! str_starts_with($old->image_url, 'http')) {
                 Storage::disk('public')->delete(str_replace('storage/', '', $old->image_url));
@@ -97,23 +151,11 @@ class ChurchController extends Controller
 
         ChurchImage::create([
             'church_id'   => $church->id,
-            'image_url'   => 'storage/' . $request->file('photo')->store('churches', 'public'),
-            'caption'     => $request->caption ?: $church->name,
+            'image_url'   => 'storage/'.$file->store('churches', 'public'),
+            'caption'     => $caption ?: $church->name,
             'is_primary'  => true,
             'uploaded_at' => now(),
             'created_at'  => now(),
         ]);
-
-        return back()->with('success', 'Photo updated for ' . $church->name . '.');
-    }
-    public function toggle(Church $church): RedirectResponse
-    {
-        $church->update([
-            'is_active'  => ! $church->is_active,
-            'updated_at' => now(),
-        ]);
-
-        return back()->with('success',
-            $church->name . ' is now ' . ($church->is_active ? 'active' : 'hidden') . '.');
     }
 }

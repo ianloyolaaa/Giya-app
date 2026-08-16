@@ -1070,3 +1070,173 @@ html[data-theme="dark"] .history-item img[src$=".svg"] { filter: invert(1) brigh
   border-radius: 999px;
   padding: 3px 9px;
 }
+
+/* ── Leaflet: photo pins, user marker, popups ───────────────── */
+.giya-pin-wrap { background: none; border: 0; }
+
+.giya-pin { position: relative; }
+.giya-pin-frame {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  overflow: hidden;
+  background: var(--gold-bg);
+}
+.giya-pin-tail {
+  position: absolute;
+  left: 50%; bottom: -9px;
+  transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 11px solid #fff;
+}
+.giya-pin.is-selected { transform: scale(1.08); transition: transform .12s ease; }
+
+.giya-me {
+  display: block; width: 22px; height: 22px;
+  border-radius: 50%; background: rgba(37,99,235,.28);
+  display: flex; align-items: center; justify-content: center;
+}
+.giya-me-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #2563EB; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.4);
+}
+
+.giya-popup { min-width: 178px; text-align: left; }
+.giya-popup img {
+  width: 100%; height: 92px; object-fit: cover;
+  border-radius: 10px; margin-bottom: 8px;
+}
+.giya-popup strong {
+  display: block; font-family: var(--font-display);
+  font-size: 0.875rem; color: var(--text); margin-bottom: 3px;
+}
+.giya-popup span {
+  display: block; font-size: 0.6875rem; color: var(--text-muted); line-height: 1.5;
+}
+.giya-popup button {
+  margin-top: 9px; width: 100%;
+  background: var(--primary); color: #fff;
+  border: 0; border-radius: 8px; padding: 7px 10px;
+  font-size: 0.6875rem; font-weight: 700; cursor: pointer;
+}
+.giya-popup button:hover { background: var(--primary-dark); }
+
+.leaflet-container { font-family: var(--font-body); background: #E8DFD1; }
+.leaflet-popup-content-wrap { border-radius: 14px; }
+.leaflet-popup-content { margin: 12px 13px; }
+
+/* Map shells */
+.giya-map-canvas {
+  height: 520px; border-radius: var(--radius-xl);
+  overflow: hidden; border: 1px solid var(--border);
+  background: #E8DFD1;
+}
+.giya-map-canvas.is-admin { height: 380px; }
+
+.map-note {
+  font-size: 0.75rem; color: var(--text-muted);
+  padding: 8px 12px; border-radius: 10px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.map-note.is-error { background: rgba(212,24,61,.08); color: #B3182F; border-color: rgba(212,24,61,.25); }
+
+.route-stop {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 11px; border-radius: 10px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  margin-bottom: 6px; font-size: 0.8125rem;
+}
+.route-stop .n {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--primary); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6875rem; font-weight: 700; flex-shrink: 0;
+}
+
+html[data-theme="dark"] .giya-pin-frame,
+html[data-theme="dark"] .giya-pin-tail { border-color: #2E241E; }
+html[data-theme="dark"] .giya-pin-tail { border-top-color: #2E241E; }
+html[data-theme="dark"] .leaflet-popup-content-wrap,
+html[data-theme="dark"] .leaflet-popup-tip { background: var(--surface); color: var(--text); }
+html[data-theme="dark"] .leaflet-container { background: #1D1714; }
+html[data-theme="dark"] .leaflet-tile { filter: brightness(.78) saturate(.85) contrast(1.05); }
+
+/* ── Destination Manager (Figma node 157:55) ─────────────────── */
+.dm-panel { padding: 26px 24px 24px; margin-bottom: 22px; }
+.dm-panel-title {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: 1.125rem; color: var(--primary); margin: 0;
+}
+.dm-label {
+  display: block; font-weight: 700; font-size: 0.9375rem;
+  color: var(--text); margin-bottom: 9px;
+}
+.dm-row { display: flex; flex-wrap: wrap; gap: 16px; }
+.dm-row > .field { margin-bottom: 4px; }
+
+.dm-map-box {
+  display: flex; flex-wrap: wrap; gap: 18px;
+  background: var(--bg); border: 1px solid #EEDCD1;
+  border-radius: var(--radius-md); padding: 16px;
+}
+.dm-map-side { flex: 0 1 260px; display: flex; flex-direction: column; }
+.dm-map-heading { font-weight: 700; font-size: 0.9375rem; color: var(--text); }
+.dm-map-hint { font-size: 0.8125rem; color: var(--text); margin: 0 0 14px; }
+.dm-choose-btn { width: 100%; max-width: 250px; height: 52px; }
+.dm-map-note {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 0.8125rem; color: #999; margin: 14px 0 0; line-height: 1.5;
+}
+.dm-map-canvas {
+  flex: 1 1 420px; min-height: 232px;
+  border: 1px solid #EEDCD1; border-radius: var(--radius-md);
+  overflow: hidden; background: #E8DFD1;
+}
+
+.dm-drop {
+  display: flex; align-items: center; justify-content: center;
+  height: 208px; cursor: pointer; overflow: hidden;
+  background: #fff; border: 2px dashed #EEDCD1;
+  border-radius: var(--radius-md); position: relative;
+  transition: border-color .15s, background .15s;
+}
+.dm-drop:hover, .dm-drop.is-over { border-color: var(--primary); background: var(--bg); }
+.dm-drop img { width: 100%; height: 100%; object-fit: cover; }
+.dm-drop-inner { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; padding: 12px; }
+.dm-drop-circle {
+  width: 45px; height: 45px; border-radius: 50%;
+  border: 1px solid #EEDCD1; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary); font-size: 1.25rem;
+}
+.dm-drop-text { font-size: 0.8125rem; color: var(--text); max-width: 180px; }
+.dm-drop-sub { font-size: 0.75rem; color: #999; }
+
+.dm-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 22px; }
+.dm-btn-wide { flex: 0 1 250px; height: 56px; font-size: 0.9375rem; }
+
+.dm-filters {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  align-items: flex-end; margin-bottom: 18px;
+}
+
+.icon-btn {
+  width: 30px; height: 30px; border: 0; cursor: pointer;
+  border-radius: 9px; background: rgba(227,176,67,.38);
+  color: var(--primary); display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.icon-btn:hover { background: var(--gold); color: #fff; }
+
+html[data-theme="dark"] .dm-map-box,
+html[data-theme="dark"] .dm-drop { background: var(--surface-2); border-color: var(--border); }
+html[data-theme="dark"] .dm-drop-circle { background: var(--surface); border-color: var(--border); }
+
+@media (max-width: 900px) {
+  .dm-map-side { flex: 1 1 100%; }
+  .dm-btn-wide { flex: 1 1 100%; }
+}

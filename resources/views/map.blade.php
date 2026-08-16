@@ -1,237 +1,208 @@
 @extends('layouts.app')
+
 @section('title', 'Map')
-@section('no-footer', true)
 
 @push('head')
-<style>
-    body { overflow: hidden; }
-    .map-layout { height: calc(100vh - 64px); }
-    .map-sidebar-head { padding: 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .map-cat-pills { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 16px;
-                     border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .map-cat-pill { padding: 5px 12px; border-radius: 999px; font-size: 0.6875rem; font-weight: 600;
-                    border: 1.5px solid var(--border); color: var(--text-muted);
-                    background: var(--bg); cursor: pointer; white-space: nowrap;
-                    transition: all .18s; font-family: var(--font-body); }
-    .map-cat-pill.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .map-church-list { flex: 1; overflow-y: auto; padding: 8px; }
-    .map-church-list::-webkit-scrollbar { width: 4px; }
-    .map-church-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
-    .map-church-item { display: flex; gap: 10px; padding: 11px; border-radius: 12px; cursor: pointer;
-                       transition: background .15s; margin-bottom: 4px;
-                       border: 1.5px solid transparent; width: 100%; text-align: left;
-                       background: transparent; font-family: var(--font-body); }
-    .map-church-item:hover { background: var(--bg); }
-    .map-church-item.selected { background: rgba(142,59,47,.06); border-color: var(--border); }
-    .map-detail { position: absolute; bottom: 0; left: 0; right: 0; z-index: 20; background: #fff;
-                  border-radius: 20px 20px 0 0; box-shadow: 0 -4px 24px rgba(0,0,0,.14);
-                  padding: 20px; transform: translateY(105%); transition: transform .3s ease; }
-    .map-detail.open { transform: translateY(0); }
-    .map-legend { position: absolute; bottom: 16px; right: 16px; z-index: 10;
-                  background: rgba(255,255,255,.96); border-radius: 12px; padding: 12px 14px;
-                  box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
-    .map-toolbar { position: absolute; top: 16px; right: 16px; z-index: 10; display: flex; gap: 8px; }
-    @media (max-width: 768px) { .map-legend { display: none; } }
-</style>
+    <link rel="stylesheet" href="{{ asset('assets/css/leaflet.css') }}?v={{ filemtime(public_path('assets/css/leaflet.css')) }}">
 @endpush
 
 @section('content')
-<div class="map-layout">
+<div style="max-width:1280px;margin:0 auto;padding:24px 20px 48px">
 
-    <aside class="map-sidebar">
-        <div class="map-sidebar-head">
-            <h1 style="font-family:var(--font-display);font-size: 1.0625rem;margin:0 0 10px">Churches in Metro Cebu</h1>
-            <div style="position:relative">
-                <img src="{{ asset('images/icons/search.svg') }}" alt="" width="15" height="15"
-                     style="position:absolute;left:12px;top:50%;transform:translateY(-50%)">
-                <input id="churchSearch" class="giya-input" style="padding-left:38px;padding-block:10px;font-size: 0.8125rem"
-                       placeholder="Search churches…" oninput="GiyaMap.search(this.value)" autocomplete="off">
-            </div>
+    <div class="d-flex align-items-end justify-content-between flex-wrap gap-3 mb-3">
+        <div>
+            <span class="eyebrow">EXPLORE</span>
+            <h1 style="font-family:var(--font-display);font-size: 1.625rem;margin:4px 0 2px">Map of Metro Cebu</h1>
+            <p style="color:var(--text-muted);font-size: 0.8125rem;margin:0">
+                Find churches near you, then build a route through the ones you want to visit.
+            </p>
         </div>
 
-        <div class="map-cat-pills">
-            @foreach ($categories as $cat)
-                <button type="button" @class(['map-cat-pill', 'active' => $loop->first])
-                        onclick="GiyaMap.filter('{{ $cat }}', this)">{{ $cat }}</button>
-            @endforeach
-        </div>
-
-        <div class="map-church-list" id="churchList"></div>
-    </aside>
-
-    <div class="map-wrap">
-        @php
-            $points = $churches->map(fn ($c, $i) => [
-                'id' => $c->id, 'name' => $c->name,
-                'lat' => $c->latitude, 'lng' => $c->longitude,
-                'color' => $c->color(), 'label' => '',
-            ]);
-        @endphp
-
-        <x-offline-map :points="$points" />
-
-        <div class="map-toolbar">
-            <button type="button" class="btn btn-primary btn-sm" onclick="GiyaMap.locate()">
-                <i class="bi bi-crosshair"></i> My Location
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline" id="btnLocate">
+                <i class="bi bi-geo-alt-fill"></i> Find my location
+            </button>
+            <button type="button" class="btn btn-primary" id="btnClearRoute" style="display:none">
+                <i class="bi bi-x-lg"></i> Clear route
             </button>
         </div>
+    </div>
 
-        <div class="map-detail" id="mapDetail">
-            <div style="width:40px;height:4px;border-radius:999px;background:#E0D3C4;margin:0 auto 16px"></div>
-            <div class="d-flex align-items-start gap-3 mb-3">
-                <span style="width:48px;height:48px;border-radius:14px;background:var(--gold-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-                    <i class="bi bi-building" style="font-size: 1.25rem;color:var(--primary)"></i>
-                </span>
-                <div style="flex:1;min-width:0">
-                    <div id="detailName"   style="font-size: 1rem;font-weight:700;color:var(--text)"></div>
-                    <div id="detailMeta"   style="font-size: 0.75rem;color:var(--text-muted);margin-top:2px"></div>
-                    <div id="detailRating" style="font-size: 0.75rem;color:var(--gold);font-weight:700;margin-top:4px"></div>
-                </div>
-                <button type="button" class="input-suffix" style="position:static"
-                        onclick="GiyaMap.closeDetail()" aria-label="Close">
-                    <i class="bi bi-x" style="font-size: 1.25rem"></i>
-                </button>
+    <div id="mapNote" class="map-note" style="display:none"></div>
+
+    <div style="display:grid;grid-template-columns:340px 1fr;gap:18px" class="map-grid">
+
+        <aside class="map-sidebar card" style="padding:16px;max-height:640px;overflow-y:auto">
+
+            <input type="search" id="mapSearch" class="giya-input" placeholder="Search churches..."
+                   style="margin-bottom:10px" aria-label="Search churches">
+
+            <div class="d-flex gap-1 flex-wrap" style="margin-bottom:14px">
+                @foreach ($categories as $category)
+                    <button type="button"
+                            @class(['btn', 'btn-sm', $loop->first ? 'btn-primary' : 'btn-ghost', 'cat-chip'])
+                            data-cat="{{ $category }}">{{ $category }}</button>
+                @endforeach
             </div>
-            <p id="detailDesc" style="font-size: 0.75rem;color:var(--text-muted);line-height:1.7;margin:0 0 14px"></p>
-            <a href="{{ route('plan.create') }}" class="btn btn-primary btn-sm btn-w-full">
-                <i class="bi bi-plus-circle"></i> Add to an Itinerary
-            </a>
-        </div>
 
-        <div class="map-legend">
-            <div style="font-weight:700;font-size: 0.6875rem;margin-bottom:8px">Map Legend</div>
-            @foreach ([['#8E3B2F','Basilica / Cathedral'],['#D7A94A','Shrine'],['#4A90D9','Church'],['#9B6B4A','Chapel'],['#6B7280','Heritage'],['#2E86DE','Your location']] as [$color, $label])
-                <div class="d-flex align-items-center gap-2 mb-1" style="font-size: 0.6875rem;color:var(--text)">
-                    <span style="width:10px;height:10px;border-radius:50%;background:{{ $color }};flex-shrink:0"></span>{{ $label }}
+            <div id="routeBox" style="display:none;margin-bottom:14px">
+                <div class="form-label-sm d-flex justify-content-between align-items-center">
+                    <span>Your route</span>
+                    <span id="routeDistance" style="color:var(--primary);font-weight:700"></span>
                 </div>
-            @endforeach
-        </div>
+                <div id="routeStops"></div>
+                <a href="#" id="btnDirections" class="btn btn-outline btn-sm" style="width:100%;margin-top:6px">
+                    <i class="bi bi-signpost-fill"></i> Open turn-by-turn
+                </a>
+                <p style="font-size: 0.6875rem;color:var(--text-muted);margin:6px 0 0">
+                    Turn-by-turn opens Google Maps and needs a data connection.
+                </p>
+            </div>
+
+            <div class="form-label-sm" id="listHeading">{{ count($markers) }} destinations</div>
+            <div id="churchList"></div>
+        </aside>
+
+        <div class="giya-map-canvas" id="giyaMap"></div>
     </div>
 </div>
 @endsection
 
 @push('scripts')
+<script src="{{ asset('assets/js/leaflet.js') }}?v={{ filemtime(public_path('assets/js/leaflet.js')) }}"></script>
+<script src="{{ asset('assets/js/giya-leaflet.js') }}?v={{ filemtime(public_path('assets/js/giya-leaflet.js')) }}"></script>
 <script>
-/**
- * Map page controller.
- *
- * The map itself is server-rendered SVG (see components/offline-map.blade.php),
- * so this script only handles selection, search, filtering and the detail panel.
- * Nothing here requires a network connection.
- */
-const GiyaMap = (function () {
-    const churches = @json($churches->map(fn ($c) => [
-        'id' => $c->id, 'name' => $c->name, 'location' => $c->location,
-        'category' => $c->category, 'rating' => (float) $c->rating,
-        'color' => $c->color(), 'visits' => $c->daily_visits,
-        'description' => $c->description,
-        'open' => $c->opening_time, 'close' => $c->closing_time,
-    ])->values());
+(function () {
+    const churches = @json($markers);
+    const note     = document.getElementById('mapNote');
+    const listBox  = document.getElementById('churchList');
+    const routeBox = document.getElementById('routeBox');
 
-    let activeCategory = 'All';
-    let selectedId = null;
+    let category = 'All';
+    let query    = '';
+    let distances = {};
 
-    function visible() {
-        return activeCategory === 'All'
-            ? churches
-            : churches.filter(c => c.category === activeCategory);
+    function showNote(message, kind) {
+        if (!message || kind === 'clear') { note.style.display = 'none'; return; }
+        note.textContent = message;
+        note.className = 'map-note' + (kind === 'error' ? ' is-error' : '');
+        note.style.display = 'block';
     }
 
-    function renderList(list) {
-        const box = document.getElementById('churchList');
+    const map = GiyaLeaflet.browse({
+        element: 'giyaMap',
+        churches: churches,
+        onStatus: showNote,
+        onFallback: function () {
+            showNote('Local map tiles are not downloaded yet, so tiles are loading from OpenStreetMap. Run "php artisan giya:tiles" to work fully offline.', 'info');
+        },
+        onLocated: function (me, nearest) {
+            distances = {};
+            nearest.forEach(function (n) { distances[n.church.id] = n.km; });
+            renderList();
+            showNote('Showing your location. The nearest destinations are listed first.', 'info');
+        },
+        onSelect: function (id) {
+            const row = document.querySelector('[data-church="' + id + '"]');
+            if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        },
+        onRoute: function (stops, totalKm) {
+            const wrap = document.getElementById('routeStops');
+            document.getElementById('btnClearRoute').style.display = stops.length ? '' : 'none';
+
+            if (!stops.length) { routeBox.style.display = 'none'; return; }
+
+            routeBox.style.display = 'block';
+            document.getElementById('routeDistance').textContent = totalKm.toFixed(1) + ' km';
+            wrap.innerHTML = stops.map(function (s, i) {
+                return '<div class="route-stop">' +
+                    '<span class="n">' + (i + 1) + '</span>' +
+                    '<span style="flex:1">' + s.name + '</span>' +
+                    '<button type="button" class="btn btn-ghost btn-sm" data-drop="' + s.id + '" aria-label="Remove stop">&times;</button>' +
+                '</div>';
+            }).join('');
+
+            const url = map.externalDirections();
+            document.getElementById('btnDirections').href = url || '#';
+        }
+    });
+
+    function filtered() {
+        return churches
+            .filter(function (c) { return category === 'All' || c.category === category; })
+            .filter(function (c) { return !query || (c.name + ' ' + c.location).toLowerCase().indexOf(query) !== -1; })
+            .sort(function (a, b) {
+                const da = distances[a.id], db = distances[b.id];
+                if (da != null && db != null) return da - db;
+                if (da != null) return -1;
+                if (db != null) return 1;
+                return a.name.localeCompare(b.name);
+            });
+    }
+
+    function renderList() {
+        const list = filtered();
+        document.getElementById('listHeading').textContent =
+            list.length + ' destination' + (list.length === 1 ? '' : 's');
 
         if (!list.length) {
-            box.innerHTML = '<p style="text-align:center;padding:36px 16px;color:var(--text-muted);font-size: 0.8125rem">' +
-                            'No destinations match your search.</p>';
+            listBox.innerHTML = '<p style="text-align:center;padding:28px 12px;color:var(--text-muted);font-size: 0.8125rem">No destinations match.</p>';
             return;
         }
 
-        box.innerHTML = list.map(function (c) {
-            return '<button type="button" class="map-church-item' + (selectedId === c.id ? ' selected' : '') +
-                   '" id="ci-' + c.id + '" onclick="GiyaMap.select(' + c.id + ')">' +
-                   '<span style="width:42px;height:42px;border-radius:10px;background:var(--gold-bg);display:flex;' +
-                   'align-items:center;justify-content:center;flex-shrink:0">' +
-                   '<i class="bi bi-building" style="color:' + c.color + '"></i></span>' +
-                   '<span style="min-width:0;flex:1">' +
-                   '<span style="display:block;font-size: 0.8125rem;font-weight:700;color:var(--text)">' + c.name + '</span>' +
-                   '<span style="display:block;font-size: 0.6875rem;color:var(--text-muted);margin-top:2px">' + (c.location || '') + '</span>' +
-                   '<span style="display:flex;align-items:center;gap:6px;margin-top:4px">' +
-                   '<span style="font-size: 0.6875rem;font-weight:700;color:var(--gold)">★ ' + c.rating.toFixed(1) + '</span>' +
-                   '<span class="badge badge-brown">' + c.category + '</span></span></span></button>';
+        listBox.innerHTML = list.map(function (c) {
+            return '<div class="history-item" data-church="' + c.id + '" style="cursor:pointer">' +
+                '<img src="' + c.image + '" alt="" style="width:42px;height:42px;border-radius:10px;object-fit:cover;flex-shrink:0">' +
+                '<div style="flex:1;min-width:0">' +
+                    '<div style="font-size: 0.8125rem;font-weight:700;color:var(--text)">' + c.name + '</div>' +
+                    '<div style="font-size: 0.6875rem;color:var(--text-muted)">' +
+                        c.category + ' &middot; ' + c.location +
+                        (distances[c.id] != null ? ' &middot; ' + distances[c.id].toFixed(1) + ' km away' : '') +
+                    '</div>' +
+                '</div>' +
+                '<button type="button" class="btn btn-ghost btn-sm" data-add="' + c.id + '" aria-label="Add to route">+</button>' +
+            '</div>';
         }).join('');
     }
 
-    function highlightPin(id) {
-        document.querySelectorAll('.om-pin').forEach(function (pin) {
-            pin.style.filter = (String(pin.dataset.pointId) === String(id))
-                ? 'drop-shadow(0 0 6px rgba(215,169,74,.95))' : '';
-        });
-    }
+    document.getElementById('btnLocate').addEventListener('click', function () { map.locate(); });
+    document.getElementById('btnClearRoute').addEventListener('click', function () { map.clearRoute(); });
 
-    function select(id) {
-        const c = churches.find(x => x.id === id);
-        if (!c) return;
-
-        selectedId = id;
-        document.getElementById('detailName').textContent   = c.name;
-        document.getElementById('detailMeta').textContent    = (c.location || 'Cebu') + ' · ' + c.category;
-        document.getElementById('detailRating').textContent  =
-            '★ ' + c.rating.toFixed(1) + (c.visits ? '  ·  ' + c.visits + ' visitors' : '');
-        document.getElementById('detailDesc').textContent    =
-            (c.open && c.close) ? 'Open ' + c.open + ' – ' + c.close : (c.description || '');
-        document.getElementById('mapDetail').classList.add('open');
-
-        document.querySelectorAll('.map-church-item').forEach(el => el.classList.remove('selected'));
-        const row = document.getElementById('ci-' + id);
-        if (row) { row.classList.add('selected'); row.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
-
-        highlightPin(id);
-    }
-
-    function closeDetail() {
-        document.getElementById('mapDetail').classList.remove('open');
-        selectedId = null;
-        document.querySelectorAll('.map-church-item').forEach(el => el.classList.remove('selected'));
-        highlightPin(null);
-    }
-
-    // Clicking a pin in the SVG selects the matching destination.
-    document.addEventListener('click', function (event) {
-        const pin = event.target.closest('.om-pin');
-        if (pin && pin.dataset.pointId) select(Number(pin.dataset.pointId));
+    document.getElementById('mapSearch').addEventListener('input', function () {
+        query = this.value.trim().toLowerCase();
+        renderList();
     });
 
-    renderList(churches);
+    document.querySelectorAll('.cat-chip').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.cat-chip').forEach(function (b) {
+                b.classList.remove('btn-primary'); b.classList.add('btn-ghost');
+            });
+            this.classList.remove('btn-ghost'); this.classList.add('btn-primary');
+            category = this.dataset.cat;
+            renderList();
+        });
+    });
 
-    return {
-        select: select,
-        closeDetail: closeDetail,
-        search: function (term) {
-            const q = term.toLowerCase().trim();
-            renderList(visible().filter(c =>
-                c.name.toLowerCase().includes(q) || (c.location || '').toLowerCase().includes(q)));
-        },
-        filter: function (cat, btn) {
-            activeCategory = cat;
-            document.querySelectorAll('.map-cat-pill').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            this.search(document.getElementById('churchSearch').value);
-        },
-        locate: function () {
-            if (!navigator.geolocation) {
-                alert('This browser does not provide location services.');
-                return;
-            }
-            navigator.geolocation.getCurrentPosition(
-                function () {
-                    // Coordinates are read successfully but the schematic map is not
-                    // georeferenced to the device, so we report rather than plot.
-                    alert('Location found. Use the destination list to pick your next stop.');
-                },
-                function () { alert('Unable to determine your location.'); }
-            );
-        },
-    };
+    document.addEventListener('click', function (e) {
+        const add = e.target.closest('[data-add]');
+        if (add) { e.stopPropagation(); map.addStop(Number(add.dataset.add)); return; }
+
+        const drop = e.target.closest('[data-drop]');
+        if (drop) { map.removeStop(Number(drop.dataset.drop)); return; }
+
+        const row = e.target.closest('[data-church]');
+        if (row) map.focus(Number(row.dataset.church));
+    });
+
+    renderList();
 })();
 </script>
+<style>
+    @media (max-width: 900px) {
+        .map-grid { grid-template-columns: 1fr !important; }
+        .map-sidebar { max-height: none !important; }
+        .giya-map-canvas { height: 420px; }
+    }
+</style>
 @endpush
