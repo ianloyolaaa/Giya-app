@@ -732,6 +732,8 @@ img { max-width: 100%; display: block; }
 }
 
 /* ── LEAFLET TOOLTIP ────────────────────────────────────────── */
+.leaflet-top,
+.leaflet-bottom { z-index: 500 !important; }
 .giya-tooltip {
   background: var(--text) !important; color: #fff !important;
   border: none !important; border-radius: var(--radius-sm) !important;
